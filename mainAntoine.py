@@ -5,9 +5,42 @@ import pandas as pd
 import geopandas
 import folium
 import branca.colormap as cm 
+from typing import Literal
+import os
 
-def createMap(data,geojson,level,year):
-    
+import streamlit as st
+from streamlit_folium import st_folium
+
+
+
+
+
+def select_data(data,level:Literal["commune","departement","region"],year):
+    data = data.query(f"Année=={year}")
+    data_dir = "data/cleaned"
+
+    if level == "commune":
+        col_name = 'Code Commune'
+        geojson = os.path.join(data_dir,"communes_france.geojson")
+
+    elif level == "departement":
+        col_name = 'Code Département'
+        geojson = os.path.join(data_dir,"departements.geojson")
+        data = data.groupby(col_name,as_index=False)["Conso totale (MWh)"].sum()
+
+    elif level == "region":
+        col_name = 'Code Région'
+        geojson = os.path.join(data_dir,"regions.geojson")
+        data = data.groupby(col_name,as_index=False)["Conso totale (MWh)"].sum()
+
+    else:
+        print(f"Erreur de level : {level}")
+        return
+
+    return data, geojson, col_name
+
+def create_map(data,geojson,col_name):
+
     min = data["Conso totale (MWh)"].min()
     max = data["Conso totale (MWh)"].max()
 
@@ -22,7 +55,7 @@ def createMap(data,geojson,level,year):
         geo_data=geojson,
         name="Consommation d'électricité en France en 2023",
         data=data,
-        columns=['Code Commune','Conso_log'],
+        columns=[col_name,'Conso_log'],
         key_on='feature.properties.code_commune',
         fill_color='YlGn',
         fill_opacity='0.7',
@@ -33,33 +66,48 @@ def createMap(data,geojson,level,year):
 
     map1.save(outfile='map.html')
 
+    return map1
+
+@st.cache_data
+def load_data():
+    return pd.read_csv("data\\raw\\consommation-annuelle-d-electricite-et-gaz-par-commune.csv",sep=";")
+
 
 def main():
-    data_dir = "data\\raw\\consommation-annuelle-d-electricite-et-gaz-par-commune.csv"
-    df           = pd.read_csv(data_dir,sep=';')
+    data_dir          = "data\\raw\\consommation-annuelle-d-electricite-et-gaz-par-commune.csv"
+    df                = load_data()
     code_villes       = df["Code Commune"]
     code_departements = df["Code Département"].unique()
     code_regions      = df["Code Région"].unique()
     years        = df["Année"].unique()
-    france_data    = df.query("Année==2023")
-    print(code_departements)
-    print(code_regions)
-    print(years)
-    print(france_data.describe)
+    
+    st.title("Ma première app Streamlit")
+    st.write("Hello world")
+    with st.sidebar:
+        year = st.selectbox("Année", sorted(years))
+        level = st.selectbox("Échelle", ["commune", "departement", "region"])
 
     ### IDF 
     idf_codes = ('75','77','78','91','92','93','94','95')
-    mask = france_data["Code Commune"].fillna("").astype(str).str.startswith(idf_codes)
+    mask = df["Code Commune"].fillna("").astype(str).str.startswith(idf_codes)
 
-    idf_data = france_data[mask]
+    idf_data = df[mask]
     idf_data["Conso_log"] = np.log1p(idf_data["Conso totale (MWh)"])
 
     ### FRANCE 
-    france_data["Conso_log"] = np.log1p(france_data["Conso totale (MWh)"])
+    df["Conso_log"] = np.log1p(df["Conso totale (MWh)"])
+
+    data, geojson, col_name = select_data(df,level,year)
+    m = create_map(data,geojson,col_name)
+    st_folium(m)
 
 
-    createMap(idf_data,"data/cleaned/communes_idf.geojson","commune",2023)
+    with open("map.html",'r') as f: 
+        html_data = f.read()
 
+    # Show in webpage
+    #st.header("HTML")
+    #st.components.v1.html(html_data)
 
 if __name__=="__main__":
     main()
