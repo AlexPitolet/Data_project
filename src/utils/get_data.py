@@ -9,7 +9,7 @@ def clean_geojson():
 
     # lecture du fichier global
     france = geopandas.read_file(geo_data_dir)
-    france.to_file("data\\cleaned\\france.geojson")
+    france.to_file("data\\cleaned\\communes_france.geojson")
 
     l = []
     # sélection des données d'Ile de France
@@ -21,7 +21,7 @@ def clean_geojson():
     idf = pd.concat(l)
 
     # écriture dans un fichier
-    idf.to_file("data\\cleaned\\idf.geojson", driver="GeoJSON")
+    idf.to_file("data\\cleaned\\communes_idf.geojson", driver="GeoJSON")
 
 
 if __name__=="__main__":
