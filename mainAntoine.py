@@ -8,8 +8,7 @@ import branca.colormap as cm
 from typing import Literal
 import os
 
-import streamlit as st
-from streamlit_folium import st_folium
+
 
 
 
@@ -81,11 +80,6 @@ def main():
     code_regions      = df["Code Région"].unique()
     years        = df["Année"].unique()
     
-    st.title("Ma première app Streamlit")
-    st.write("Hello world")
-    with st.sidebar:
-        year = st.selectbox("Année", sorted(years))
-        level = st.selectbox("Échelle", ["commune", "departement", "region"])
 
     ### IDF 
     idf_codes = ('75','77','78','91','92','93','94','95')
@@ -98,16 +92,12 @@ def main():
     df["Conso_log"] = np.log1p(df["Conso totale (MWh)"])
 
     data, geojson, col_name = select_data(df,level,year)
-    m = create_map(data,geojson,col_name)
-    st_folium(m)
+    create_map(data,geojson,col_name)
+    
 
 
-    with open("map.html",'r') as f: 
-        html_data = f.read()
-
-    # Show in webpage
-    #st.header("HTML")
-    #st.components.v1.html(html_data)
+    #with open("map.html",'r') as f: 
+    #    html_data = f.read()
 
 if __name__=="__main__":
     main()
