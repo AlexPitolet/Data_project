@@ -9,10 +9,7 @@ wheels/
 # Virtual environments
 .venv
 
-#zip dataset
-dataset.zip
-GeoDataset.zip
+#dataset (1 Go)
 data
-#data/raw/consommation-annuelle-d-electricite-et-gaz-par-commune.csv
 
 Ex1.py
