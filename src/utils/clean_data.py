@@ -2,15 +2,18 @@ import pandas as pd
 from pandas import Series,DataFrame
 import geopandas
 import numpy as np
+import shutil
 
-data = pd.read_csv("data/raw/new-consommation-annuelle-d-electricite-et-gaz-par-commune.csv")
+data = pd.read_csv("data/raw/consommation-annuelle-d-electricite-et-gaz-par-commune.csv")
 
 def clean_geojson():   
-    geo_data_dir = "data\\raw\\datagouv-communes.geojson"
-    
+    geo_communes_dir = "data\\raw\\datagouv-communes.geojson"
+    geo_dep_dir =   "data\\raw\\departements-50m.geojson"
+    geo_reg_dir =   "data\\raw\\datagouv-communes.geojson"
 
+    ### Communes
     # lecture du fichier global
-    france = geopandas.read_file(geo_data_dir)
+    france = geopandas.read_file(geo_communes_dir)
     france.to_file("data\\cleaned\\communes_france.geojson")
 
     l = []
@@ -25,8 +28,17 @@ def clean_geojson():
     # écriture dans un fichier
     idf.to_file("data\\cleaned\\communes_idf.geojson", driver="GeoJSON")
 
+    ### Departements
+    dest = "data/cleaned/departements.geojson"
+    shutil.copyfile(geo_dep_dir,dest)
+
+    ### Regions
+    dest = "data/cleaned/regions.geojson"
+    shutil.copyfile(geo_reg_dir,dest)
+
+
 def clean_csv():
-    data = pd.read_csv("data/raw/new-consommation-annuelle-d-electricite-et-gaz-par-commune.csv")
+    data = pd.read_csv("data/raw/consommation-annuelle-d-electricite-et-gaz-par-commune.csv")
     df = data[["Année","Code Région","Code Département","Code Commune","Conso totale (MWh)"]]
     df.to_csv("data/cleaned/codes_et_conso_totale.csv")
 
@@ -37,4 +49,4 @@ def clean_all_data():
 
 if __name__=="__main__":
     print("Cleaning data")
-    clean_csv()
+    clean_all_data()

@@ -28,7 +28,7 @@ def get_csv():
     url = "https://www.data.gouv.fr/api/1/datasets/r/b73dda82-ba8e-44f5-ac41-1c14959c67f7"
     file_name = "consommation-annuelle-d-electricite-et-gaz-par-commune.csv"
 
-    urllib.request.urlretrieve(url, os.path.join("",file_name))
+    urllib.request.urlretrieve(url, os.path.join(RAW_DATA_DIR,file_name))
     return
 
 
