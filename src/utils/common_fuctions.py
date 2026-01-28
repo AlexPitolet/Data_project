@@ -1,9 +1,9 @@
 from typing import Literal
 import json
 import os
+import pandas as pd 
 
-def select_data(data,level:Literal["commune","departement","region"],year):
-    data = data.query(f"Année=={year}")
+def select_data(level:Literal["commune","departement","region"],year):
     data_dir = "data/cleaned"
 
     if level == "commune":
@@ -14,6 +14,8 @@ def select_data(data,level:Literal["commune","departement","region"],year):
         key_on = 'properties.code_commune'
 
     elif level == "departement":
+        data = pd.read_csv(os.path.join(data_dir,"codes_et_conso_totale_departements.csv"))
+        data = data.query(f"Année=={year}")
         col_name = 'Code Département'
         geojson_path = os.path.join(data_dir,"departements.geojson")
         with open(geojson_path) as f:
@@ -22,6 +24,8 @@ def select_data(data,level:Literal["commune","departement","region"],year):
         key_on = 'properties.code'
 
     elif level == "region":
+        data = pd.read_csv(os.path.join(data_dir,"codes_et_conso_totale_regions.csv"))
+        data = data.query(f"Année=={year}")
         col_name = 'Code Région'
         geojson_path = os.path.join(data_dir,"regions.geojson")
         with open(geojson_path) as f:

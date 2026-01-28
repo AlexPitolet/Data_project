@@ -7,7 +7,11 @@ def navbar():
         dcc.Link("Histogramme", href="/hist"),
         dcc.Link("Graphique dynamique", href="/dynamic-graph"),
         dcc.Link("À propos", href="/about")
-    ],style={"display":"flex",
-             "justify-content":"space-evenly"
-             }
+    ],
+    style={
+        "padding":"1em",
+        "backgroundColor":"#eee",
+        "display":"flex",
+        "justify-content":"space-evenly"
+    }
     )

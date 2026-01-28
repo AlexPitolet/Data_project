@@ -3,11 +3,10 @@ import pandas as pd
 import plotly_express as px
 from src.utils.common_fuctions import select_data
 
-df = pd.read_csv("data/cleaned/codes_et_conso_totale.csv")
 level = "region"
 year = 2011
 
-data, geojson, col_name, key_on = select_data(df,level,year)
+data, geojson, col_name, key_on = select_data(level,year)
 
 fig = px.choropleth_map(
         data_frame=data,
@@ -17,7 +16,7 @@ fig = px.choropleth_map(
         color="Conso totale (MWh)",
         color_continuous_scale="YlGn",
         center={"lat": 46.6, "lon": 2.5},  # centre de la France
-        zoom=4  
+        zoom=5
     )
 
 layout = html.Div([ 
@@ -55,7 +54,7 @@ layout = html.Div([
                                 dcc.Dropdown(
                                     id="scale-dropdown",
                                     options=[
-                                        {'label': 'Commune', 'value': "commune"},
+                                        #{'label': 'Commune', 'value': "commune"},
                                         {'label': 'Département', 'value': "departement"},
                                         {'label': 'Région', 'value': "region"},
                                     ],
@@ -65,7 +64,7 @@ layout = html.Div([
                                 style={
                                     "display":"flex",
                                     "flexDirection":"column",
-                                    "witdh":"20vw",
+                                    "witdh":"40vw",
                                 }),
                                 dcc.Graph(
                                     id='map',
@@ -74,7 +73,9 @@ layout = html.Div([
                                 )
                             ],
                             style={
-                                "display":"flex"
+                                "display":"flex",
+                                "alignItems":"center",
+                                "justifyContent":"center"
                             }
                             ),
                         
@@ -96,7 +97,7 @@ def register_callback(app):
          Input(component_id='scale-dropdown', component_property='value')] # (2)
     )
     def update_figure(year, scale): # (3)
-        data, geojson, col_name, key_on = select_data(df,scale,year)
+        data, geojson, col_name, key_on = select_data(scale,year)
         fig = px.choropleth_map(
             data_frame=data,
             geojson=geojson,
@@ -105,7 +106,7 @@ def register_callback(app):
             color="Conso totale (MWh)",
             color_continuous_scale="YlGn",
             center={"lat": 46.6, "lon": 2.5},  # centre de la France
-            zoom=4
+            zoom=5
             ) # (4)
         title = f"Map de la consommation d'électricité totale entre {year} au niveau {scale}"
         desc = f'''
