@@ -1,5 +1,5 @@
 from dash import html
 
 layout = html.Div([
-    html.H2("À propos !")
+    html.H2("Graphique dynamique")
 ])
