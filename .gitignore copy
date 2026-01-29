@@ -1,0 +1,15 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+#zip dataset
+dataset.zip
+GeoDataset.zip
+#data/raw/dataset/consommation-annuelle-d-electricite-et-gaz-par-commune.csv
