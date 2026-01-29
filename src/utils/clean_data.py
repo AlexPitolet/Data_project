@@ -4,7 +4,7 @@ import geopandas
 import numpy as np
 import shutil
 import os
-
+'''
 df_raw=pd.read_csv("data/raw/dataset/consommation-annuelle-d-electricite-et-gaz-par-commune.csv", sep=";")  
 
 cols1 = df_raw.loc[:,"OPERATEUR" : "Code Commune"].columns
@@ -49,21 +49,21 @@ conso_moy_per_region_csv = df_final.to_csv("data/cleaned/conso_per_region2.csv")
 #df_conso_moy_per_region = pd.DataFrame.from_dict(conso_moy_per_region, orient= 'index', columns=["Conso moyenne (MWh)"])
 #df_conso_moy_per_region.index.name = "Nom Région"
 #conso_moy_per_region_csv =df_conso_moy_per_region.to_csv("data/cleaned/conso_per_region.csv")
-
+'''
 
 CLEAN_DATA_DIR = "data/cleaned"
 NB_DATA = 7 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
 
 
 def clean_geojson():   
-    geo_communes_dir = "data\\raw\\datagouv-communes.geojson"
-    geo_dep_dir =   "data\\raw\\departements-50m.geojson"
-    geo_reg_dir =   "data\\raw\\regions-50m.geojson"
+    geo_communes_dir = "data/raw/datagouv-communes.geojson"
+    geo_dep_dir =   "data/raw/departements-50m.geojson"
+    geo_reg_dir =   "data/raw/regions-50m.geojson"
 
     ### Communes
     # lecture du fichier global
     france = geopandas.read_file(geo_communes_dir)
-    france.to_file("data\\cleaned\\communes_france.geojson") #1
+    france.to_file("data/cleaned/communes_france.geojson") #1
 
     l = []
     # sélection des données d'Ile de France
@@ -75,7 +75,7 @@ def clean_geojson():
     idf = pd.concat(l)
 
     # écriture dans un fichier
-    idf.to_file("data\\cleaned\\communes_idf.geojson", driver="GeoJSON") #2
+    idf.to_file("data/cleaned/communes_idf.geojson", driver="GeoJSON") #2
 
     ### Departements
     dest = "data/cleaned/departements.geojson"
@@ -114,7 +114,3 @@ def clean_all_data():
         print("Cleaning data")
         clean_data()
         print("Data successfully cleaned")    
-
-if __name__=="__main__":
-    print("Cleaning data")
-    clean_all_data()

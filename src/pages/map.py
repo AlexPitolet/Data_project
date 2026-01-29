@@ -75,7 +75,8 @@ layout = html.Div([
                             style={
                                 "display":"flex",
                                 "alignItems":"center",
-                                "justifyContent":"center"
+                                "justifyContent":"center",
+                                "witdh":"100%"
                             }
                             ),
                         

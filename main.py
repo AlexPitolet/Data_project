@@ -10,7 +10,6 @@ from dash import Dash, dcc, html, Input, Output
 from src.component.header import header
 from src.component.footer import footer
 from src.component.navbar import navbar
-from src.pages import home,map,hist,dynamic,about
 
 import dash
 from dash import Dash,dcc,html
@@ -18,6 +17,8 @@ from dash.dependencies import Input,Output
 
 from src.utils.get_data import get_all_data
 from src.utils.clean_data import clean_all_data
+
+'''
 #
 # Data
 #
@@ -58,13 +59,13 @@ def main():
                                 #figure=fig
                             ), # (6)
 
-                            html.Div(children=f'''
+                            html.Div(children=f"""
                                 Ce graphe montre la consommation moyenne d'électricité en MWh par 
                                 région, lissée par nombre de site pt de livraison) au sein de cette dernière.
                                 Chaque région possède sa couleur et la taille d'une barre dans l'histogramme
                                 est proportionnelle à la consommation de la région associée
                                 Passe la souris par dessus pour plus de détail.
-                            '''), # (7)
+                            """), # (7)
 
     ]
     )
@@ -98,10 +99,14 @@ def main():
     #
 
     app.run(debug=True) # (8)
-
+''' 
 ##################### MAIN ANTOINE ####################
-    get_all_data() #loads all raw data 
-    clean_all_data() #cleans all raw data, keeping only useful data to lighten the dashboard
+def main():
+    get_all_data() # verify that the data is present
+    clean_all_data() # verify is rawdata as been cleaned. Keeping only useful data to lighten the dashboard
+    
+    from src.pages import home,map,hist,dynamic,about # import après le nettoyage des données car map.py à besoin des données 
+
 
     app = Dash(__name__,suppress_callback_exceptions=True)
     

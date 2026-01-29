@@ -57,6 +57,5 @@ def get_all_data():
         get_data()
         print("Dataset successfully downloaded")    
 
-if __name__=="__main__":
-    get_all_data()
+
     
