@@ -16,6 +16,8 @@ import dash
 from dash import Dash,dcc,html
 from dash.dependencies import Input,Output
 
+from src.utils.get_data import get_all_data
+from src.utils.clean_data import clean_all_data
 #
 # Data
 #
@@ -27,6 +29,7 @@ annees_disponibles = sorted(df['Année'].unique())
 #
 
 def main():
+##################### MAIN ALEX ####################
     app = dash.Dash(__name__) # (3)
 
     #fig = px.bar(df, x="Nom Région", y="Conso moyenne (MWh)", color="Nom Région") # (4)
@@ -96,8 +99,10 @@ def main():
 
     app.run(debug=True) # (8)
 
-if __name__ == '__main__':
-    main()
+##################### MAIN ANTOINE ####################
+    get_all_data() #loads all raw data 
+    clean_all_data() #cleans all raw data, keeping only useful data to lighten the dashboard
+
     app = Dash(__name__,suppress_callback_exceptions=True)
     
 
