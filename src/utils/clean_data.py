@@ -114,3 +114,5 @@ def clean_all_data():
         print("Cleaning data")
         clean_data()
         print("Data successfully cleaned")    
+    else: 
+        print("Data already cleaned")  
