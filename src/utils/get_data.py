@@ -1,7 +1,10 @@
 import urllib.request
 import os
 
-RAW_DATA_DIR = "data/raw"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+RAW_DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
+
+#RAW_DATA_DIR = "/data/raw"
 
 def get_geojson():
     ### Get France cities borders geojson

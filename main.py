@@ -9,9 +9,11 @@ from src.component.footer import footer
 from src.component.navbar import navbar
 
 from src.utils.clean_data import clean_all_data
-
+import src.utils.get_data as gd   
+from src.utils.get_data import get_data, get_geojson, get_csv
 
 if __name__ == '__main__':
+    gd.get_data()
     clean_all_data()
     from src.pages import home,map,hist,dynamic,about
     app = Dash(__name__,suppress_callback_exceptions=True)
