@@ -1,7 +1,11 @@
 import urllib.request
 import os
 
-RAW_DATA_DIR = "data/raw"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+RAW_DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
+
+#RAW_DATA_DIR = "/data/raw"
+#RAW_DATA_DIR = "data/raw"
 NB_DATA = 4 # à modifier en fonction du nb de fichier à obtenir au final dans data/raw 
 
 def get_geojson():
