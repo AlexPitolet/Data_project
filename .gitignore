@@ -9,9 +9,8 @@ wheels/
 # Virtual environments
 .venv
 
-#dataset (1 Go)
-data
+#data (to big for github more than 1 Go)
+data 
 
-#dataset
-Ex1.py
-Dash-1.py
+# unused files 
+mainAntoine

@@ -10,12 +10,13 @@ from src.component.navbar import navbar
 
 from src.utils.clean_data import clean_all_data
 import src.utils.get_data as gd   
-from src.utils.get_data import get_data, get_geojson, get_csv
+from src.utils.get_data import get_data, get_geojson, get_csv, get_all_data
 
 if __name__ == '__main__':
-    gd.get_data()
-    clean_all_data()
-    from src.pages import home,map,hist,dynamic,about
+    gd.get_all_data()   # verify that the data is present
+    clean_all_data()    # verify is rawdata as been cleaned. Keeping only useful data to lighten the dashboard
+    from src.pages import home,map,hist,dynamic,about # import après le nettoyage des données car map.py à besoin des données 
+
     app = Dash(__name__,suppress_callback_exceptions=True)
 
     app.layout = html.Div([
@@ -45,5 +46,6 @@ if __name__ == '__main__':
         
         return html.H1("404 - Page non trouvée")
     map.register_callback(app)
+    hist.register_callback(app)
 
     app.run(debug=True)

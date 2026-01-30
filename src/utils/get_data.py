@@ -5,6 +5,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 RAW_DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
 
 #RAW_DATA_DIR = "/data/raw"
+#RAW_DATA_DIR = "data/raw"
+NB_DATA = 4 # à modifier en fonction du nb de fichier à obtenir au final dans data/raw 
 
 def get_geojson():
     ### Get France cities borders geojson
@@ -46,6 +48,18 @@ def get_data():
     print("GEOJSONs files successfully downloaded")
     return
 
+def checkData():
+    if(not os.path.exists(RAW_DATA_DIR)):
+        print(f"Dir {RAW_DATA_DIR} doesn't exist...\nCreation of the directory")
+        os.mkdir(RAW_DATA_DIR)
+    return len(os.listdir(RAW_DATA_DIR)) == NB_DATA
 
-if __name__=="__main__":
-    get_data()
+def get_all_data():
+    print("Checking if dataset is installed")
+    if(not checkData()):
+        print("Dataset not installed !\nStarting download...")
+        get_data()
+        print("Dataset successfully downloaded")    
+
+
+    
