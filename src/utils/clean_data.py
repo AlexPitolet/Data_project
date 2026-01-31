@@ -6,30 +6,12 @@ import shutil
 import os
 
 CLEAN_DATA_DIR = "data/cleaned"
-NB_DATA = 90 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
+NB_DATA = 7 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
 
 
 def clean_geojson():   
-    geo_communes_dir = "data/raw/datagouv-communes.geojson"
     geo_dep_dir =   "data/raw/departements-50m.geojson"
     geo_reg_dir =   "data/raw/regions-50m.geojson"
-
-    ### Communes
-    # lecture du fichier global
-    france = geopandas.read_file(geo_communes_dir)
-    france.to_file("data/cleaned/communes_france.geojson") #1
-
-    l = []
-    # sélection des données d'Ile de France
-    for dpt in ["75", "77", "78", "91", "92", "93", "94", "95"]:
-        dptidf = france[france["code_commune"].str.startswith(dpt)]
-        l.append(dptidf)
-
-    # construction de la GeoDataFrame correspondante
-    idf = pd.concat(l)
-
-    # écriture dans un fichier
-    idf.to_file("data/cleaned/communes_idf.geojson", driver="GeoJSON") #2
 
     ### Departements
     dest = "data/cleaned/departements.geojson"
@@ -45,10 +27,10 @@ def clean_csv():
     df = data[["Année","Code Région","Nom Région","Code Département","Nom Département","Code Commune","Conso totale (MWh)","Conso moyenne (MWh)"]]
     df.to_csv("data/cleaned/codes_et_conso_totale.csv")     #5
 
-    dep = df.groupby(["Code Département","Année"],as_index=False)["Conso totale (MWh)"].sum()
+    dep = df.groupby(["Code Département","Année","Nom Département"],as_index=False)["Conso totale (MWh)"].sum()
     dep.to_csv("data/cleaned/codes_et_conso_totale_departements.csv")   #6
 
-    reg = df.groupby(["Code Région","Année"],as_index=False)["Conso totale (MWh)"].sum()
+    reg = df.groupby(["Code Région","Année","Nom Région"],as_index=False)["Conso totale (MWh)"].sum()
     reg.to_csv("data/cleaned/codes_et_conso_totale_regions.csv")    #7
  
 

@@ -6,15 +6,9 @@ RAW_DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
 
 #RAW_DATA_DIR = "/data/raw"
 #RAW_DATA_DIR = "data/raw"
-NB_DATA = 4 # à modifier en fonction du nb de fichier à obtenir au final dans data/raw 
+NB_DATA = 3 # à modifier en fonction du nb de fichier à obtenir au final dans data/raw 
 
 def get_geojson():
-    ### Get France cities borders geojson
-    url = "https://perso.esiee.fr/~courivad/courses/EPIGEP-FI-3-S1-UPM-Python-visualisation-donnees/_downloads/52338df481935edd0f0adb1ac3154f5f/datagouv-communes.geojson"
-    file_name = "datagouv-communes.geojson"
-
-    urllib.request.urlretrieve(url, os.path.join(RAW_DATA_DIR,file_name))
-
     ### Get France departements borders geojson
     url = "https://adresse.data.gouv.fr/data/contours-administratifs/2023/geojson/departements-50m.geojson"
     file_name = "departements-50m.geojson"
