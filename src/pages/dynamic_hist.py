@@ -1,3 +1,5 @@
+from dash import html
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -8,21 +10,19 @@ from dash import Dash, dcc, html, Input, Output
 # from dash.dependencies import Input,Output
 
 df = pd.read_csv("data/cleaned/conso_per_region.csv")
-annees_disponibles = sorted(df['Année'].unique())
-
-#fig = px.bar(df, x="Nom Région", y="Conso moyenne (MWh)", color="Nom Région") # (4)
-
+df["Année"] = df["Année"].astype(int)
+annees_disponibles = sorted(df["Année"].unique())
 
 layout = html.Div(children=[
 
-                        html.H1(children=f'Consommation moyenne d\'énergie par région ',
+                        html.H1(children=f'Histogramme dynamique représentant la consommation moyenne d\'énergie par région ',
                                     style={'textAlign': 'center', 'color': '#7FDBFF'}), # (5)
 
                         #Year Slider
                         html.Div([
                             html.Label("Sélectionnez l'année :"),
                             dcc.Slider(
-                                id='year-slider',
+                                id='year-slider-dynamic',
                                 min=min(annees_disponibles),
                                 max=max(annees_disponibles),
                                 value=min(annees_disponibles), # Valeur par défaut
@@ -51,7 +51,7 @@ def register_callback(app):
 # --- CALLBACK ---
     @app.callback(
         Output('graphConso', 'figure'),
-        Input('year-slider', 'value')
+        Input('year-slider-dynamic', 'value')
     )
     def update_figure(selected_year):
         # 1. Filtrer le dataframe selon l'année choisie

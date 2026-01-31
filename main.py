@@ -15,7 +15,7 @@ from src.utils.get_data import get_data, get_geojson, get_csv, get_all_data
 if __name__ == '__main__':
     gd.get_all_data()   # verify that the data is present
     clean_all_data()    # verify is rawdata as been cleaned. Keeping only useful data to lighten the dashboard
-    from src.pages import home,map,hist,dynamic,about # import après le nettoyage des données car map.py à besoin des données 
+    from src.pages import home,map,non_cat_hist,dynamic_hist,about # import après le nettoyage des données car map.py à besoin des données 
 
     app = Dash(__name__,suppress_callback_exceptions=True)
 
@@ -37,15 +37,16 @@ if __name__ == '__main__':
             return home.layout
         if(pathname in ["/map"]):
             return map.layout
-        if(pathname in ["/hist"]):
-            return hist.layout
-        if(pathname in ["/dynamic-graph"]):
-            return dynamic.layout
+        if(pathname in ["/non_cat_hist"]):
+            return non_cat_hist.layout
+        if(pathname in ["/dynamic_hist"]):
+            return dynamic_hist.layout
         if(pathname in ["/about"]):
             return about.layout
         
         return html.H1("404 - Page non trouvée")
     map.register_callback(app)
-    hist.register_callback(app)
+    non_cat_hist.register_callback(app)
+    dynamic_hist.register_callback(app)
 
     app.run(debug=True)
