@@ -1,7 +1,3 @@
-
-import numpy as np
-import pandas as pd
-import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
 
 from src.component.header import header
@@ -9,11 +5,10 @@ from src.component.footer import footer
 from src.component.navbar import navbar
 
 from src.utils.clean_data import clean_all_data
-import src.utils.get_data as gd   
 from src.utils.get_data import get_all_data
 
 if __name__ == '__main__':
-    gd.get_all_data()   # verify that the data is present
+    get_all_data()   # verify that the data is present
     clean_all_data()    # verify is rawdata as been cleaned. Keeping only useful data to lighten the dashboard
     from src.pages import home,map,non_cat_hist,dynamic_hist,about # import après le nettoyage des données car map.py à besoin des données 
 

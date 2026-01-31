@@ -1,5 +1,4 @@
 from dash import html, dcc, Input, Output
-import pandas as pd
 import plotly_express as px
 from src.utils.common_fuctions import select_data
 
@@ -27,7 +26,7 @@ fig = px.choropleth_map(
 
 layout = html.Div([ 
                         html.H1(id='H1',
-                            children=f"Carte de la {consumption_type} entre {year} au niveau {level}",        
+                            children=f"Carte de la {consumption_type} en {year} au niveau {level}",        
                             style={
                                 'textAlign': 'center', 
                                 'color': '#7FDBFF',
@@ -189,6 +188,6 @@ def register_callback(app):
             center={"lat": 46.6, "lon": 2.5},  # centre de la France
             zoom=5,
             ) # (4)
-        title = f"Carte de la {cons_type} entre {year} au niveau {scale}"
+        title = f"Carte de la {cons_type} en {year} au niveau {scale}"
         
         return fig,title

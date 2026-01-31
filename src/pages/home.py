@@ -1,5 +1,4 @@
-from dash import html, dcc, Input, Output
-from src.component import header
+from dash import html
 
 layout = html.Div(
     [
