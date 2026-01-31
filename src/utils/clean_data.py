@@ -6,7 +6,7 @@ import shutil
 import os
 
 CLEAN_DATA_DIR = "data/cleaned"
-NB_DATA = 7 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
+NB_DATA = 8 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
 
 
 def clean_geojson():   
@@ -25,14 +25,16 @@ def clean_geojson():
 def clean_csv():
     data = pd.read_csv("data/raw/consommation-annuelle-d-electricite-et-gaz-par-commune.csv")
     df = data[["Année","Code Région","Nom Région","Code Département","Nom Département","Code Commune","Conso totale (MWh)","Conso moyenne (MWh)"]]
-    df.to_csv("data/cleaned/codes_et_conso_totale.csv")     #5
+    df.to_csv("data/cleaned/conso_totale.csv")     #5
 
     dep = df.groupby(["Code Département","Année","Nom Département"],as_index=False)["Conso totale (MWh)"].sum()
-    dep.to_csv("data/cleaned/codes_et_conso_totale_departements.csv")   #6
+    dep.to_csv("data/cleaned/conso_totale_departements.csv")   #6
 
     reg = df.groupby(["Code Région","Année","Nom Région"],as_index=False)["Conso totale (MWh)"].sum()
-    reg.to_csv("data/cleaned/codes_et_conso_totale_regions.csv")    #7
- 
+    reg.to_csv("data/cleaned/conso_totale_regions.csv")    #7
+    
+    dep = df.groupby(["Code Département","Année","Nom Département"],as_index=False)["Conso moyenne (MWh)"].mean().reset_index()
+    dep.to_csv("data/cleaned/conso_moy_departements.csv")   #8
     
     cols1 = data.loc[:,"OPERATEUR" : "Code Commune"].columns
     cols2 = data.loc[:,"Code Département" : "CODE GRAND SECTEUR"].columns
