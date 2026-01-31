@@ -4,7 +4,7 @@ import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
 
 
-df = pd.read_csv("data/cleaned/codes_et_conso_totale.csv")
+df = pd.read_csv("data/cleaned/conso_totale.csv")
 df["Année"] = df["Année"].astype(int)
 annees_disponibles = sorted(df["Année"].unique())
 df_hist = df[["Code Commune", "Conso totale (MWh)", "Année"]]

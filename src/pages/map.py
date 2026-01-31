@@ -14,12 +14,12 @@ fig = px.choropleth_map(
         geojson=geojson,
         featureidkey=key_on,
         locations=col_name,
-        color="Conso totale (MWh)",
+        color=consumption_type,
         color_continuous_scale="YlGn",
         hover_name= hover,
         hover_data={
             col_name: True,             
-            "Conso totale (MWh)": ": .0f",  
+            consumption_type: ":,.0f",  
         },
         center={"lat": 46.6, "lon": 2.5},  # centre de la France
         zoom=5,
@@ -27,7 +27,7 @@ fig = px.choropleth_map(
 
 layout = html.Div([ 
                         html.H1(id='H1',
-                            children=f"Carte de la consommation d'électricité totale entre {year}",        
+                            children=f"Carte de la {consumption_type} entre {year} au niveau {level}",        
                             style={
                                 'textAlign': 'center', 
                                 'color': '#7FDBFF',
@@ -184,11 +184,11 @@ def register_callback(app):
             hover_name= hover,
             hover_data={
                 col_name: True,             
-                cons_type: ": .0f",  
+                cons_type: ":,.0f",  
             },
             center={"lat": 46.6, "lon": 2.5},  # centre de la France
             zoom=5,
             ) # (4)
-        title = f"Carte de la consommation d'électricité totale entre {year} au niveau {scale}"
+        title = f"Carte de la {cons_type} entre {year} au niveau {scale}"
         
         return fig,title
