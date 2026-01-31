@@ -1,12 +1,10 @@
 import pandas as pd
-from pandas import Series,DataFrame
-import geopandas
 import numpy as np
 import shutil
 import os
 
 CLEAN_DATA_DIR = "data/cleaned"
-NB_DATA = 110 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
+NB_DATA = 11 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
 
 
 def clean_geojson():   
@@ -59,7 +57,7 @@ def clean_csv():
                 mean_conso = df_region["Conso moyenne (MWh)"].mean()
                 conso_moy_per_region[(int)(annee)][df_region["Nom Région"].mode()[0]] = (float)(mean_conso) #ajouter le mode au prétraitement ? 
 
-    print(conso_moy_per_region)
+    #print(conso_moy_per_region)
 
     df_grouped = df.groupby(['Année', 'Nom Région'])['Conso moyenne (MWh)'].mean().reset_index()
     df_grouped.to_csv("data/cleaned/conso_per_region.csv")

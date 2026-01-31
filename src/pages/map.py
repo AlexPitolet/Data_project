@@ -1,5 +1,4 @@
 from dash import html, dcc, Input, Output
-import pandas as pd
 import plotly_express as px
 from src.utils.common_fuctions import select_data
 
