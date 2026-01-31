@@ -33,7 +33,7 @@ def clean_csv():
     reg = df.groupby(["Code Région","Année","Nom Région"],as_index=False)["Conso totale (MWh)"].sum()
     reg.to_csv("data/cleaned/codes_et_conso_totale_regions.csv")    #7
  
-
+    
     cols1 = data.loc[:,"OPERATEUR" : "Code Commune"].columns
     cols2 = data.loc[:,"Code Département" : "CODE GRAND SECTEUR"].columns
     cols3 = data.loc[:,"Conso totale (MWh)": "Conso moyenne (MWh)"].columns

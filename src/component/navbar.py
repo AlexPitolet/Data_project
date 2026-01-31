@@ -4,8 +4,8 @@ def navbar():
     return html.Nav([
         dcc.Link("Accueil", href="/home"),
         dcc.Link("Carte", href="/map"),
-        dcc.Link("Histogramme", href="/hist"),
-        dcc.Link("Graphique dynamique", href="/dynamic-graph"),
+        dcc.Link("Histogramme", href="/non_cat_hist"),
+        dcc.Link("Graphique dynamique", href="/dynamic_hist"),
         dcc.Link("À propos", href="/about")
     ],
     style={
