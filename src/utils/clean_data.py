@@ -6,7 +6,7 @@ import shutil
 import os
 
 CLEAN_DATA_DIR = "data/cleaned"
-NB_DATA = 9 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
+NB_DATA = 90 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
 
 
 def clean_geojson():   
@@ -42,7 +42,7 @@ def clean_geojson():
 
 def clean_csv():
     data = pd.read_csv("data/raw/consommation-annuelle-d-electricite-et-gaz-par-commune.csv")
-    df = data[["Année","Code Région","Code Département","Code Commune","Conso totale (MWh)"]]
+    df = data[["Année","Code Région","Nom Région","Code Département","Nom Département","Code Commune","Conso totale (MWh)","Conso moyenne (MWh)"]]
     df.to_csv("data/cleaned/codes_et_conso_totale.csv")     #5
     
     reg = df.groupby(["Code Région","Année"],as_index=False)["Conso totale (MWh)"].sum()
@@ -110,3 +110,5 @@ def clean_all_data():
         print("Cleaning data")
         clean_data()
         print("Data successfully cleaned")    
+    else: 
+        print("Data already cleaned")  

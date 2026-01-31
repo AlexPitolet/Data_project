@@ -60,6 +60,7 @@ def get_all_data():
         print("Dataset not installed !\nStarting download...")
         get_data()
         print("Dataset successfully downloaded")    
-
+    else : 
+        print("Data already downloaded")  
 
     

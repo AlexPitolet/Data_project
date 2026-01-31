@@ -17,6 +17,9 @@ def select_data(level:Literal["commune","departement","region"],year):
         data = pd.read_csv(os.path.join(data_dir,"codes_et_conso_totale_departements.csv"))
         data = data.query(f"Année=={year}")
         col_name = 'Code Département'
+
+        data[col_name] = data[col_name].astype(str).str.zfill(2) # Evitement de l'incompatibilité entre les codes dep du csv et du geojson
+
         geojson_path = os.path.join(data_dir,"departements.geojson")
         with open(geojson_path) as f:
             geojson = json.load(f)

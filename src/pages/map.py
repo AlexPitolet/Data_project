@@ -106,8 +106,13 @@ def register_callback(app):
             locations=col_name,
             color="Conso totale (MWh)",
             color_continuous_scale="YlGn",
+            hover_name="Nom Département",  
+            hover_data={
+                col_name: True,             
+                "Conso totale (MWh)": ":,.0f",  
+            },
             center={"lat": 46.6, "lon": 2.5},  # centre de la France
-            zoom=5
+            zoom=5,
             ) # (4)
         title = f"Map de la consommation d'électricité totale entre {year} au niveau {scale}"
         desc = f'''
