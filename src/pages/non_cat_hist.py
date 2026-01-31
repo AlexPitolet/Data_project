@@ -53,28 +53,65 @@ def register_callback(app):
         Input('year-slider-hist', 'value')
     )
     def update_figure(selected_year):
-        # 1. Filtrer le dataframe selon l'année choisie
-        filtered_df = df_hist[df_hist['Année'] == selected_year]
+
+        filtered_df = df_hist[df_hist["Année"] == selected_year]
         filtered_df = filtered_df[filtered_df["Conso totale (MWh)"] > 0]
-        filtered_df["Conso totale (MWh)"] = np.log10(filtered_df["Conso totale (MWh)"])
-        
-        # 2. Créer la figure mise à jour
+        filtered_df["log_conso"] = np.log10(filtered_df["Conso totale (MWh)"])
+        # fig = px.histogram(
+        #     filtered_df,
+        #     x="Conso totale (MWh)",
+        #     title=f"Répartition en {selected_year}",
+        #     labels={
+        #         "Conso totale (MWh)": "Consommation totale (MWh)",
+        #         "count": "Nombre de communes"
+        #     }
+        # )
+
+        # fig.update_xaxes(
+        #     type="log",
+        #     tickvals=[1e3, 1e4, 1e5, 1e6],
+        #     ticktext=[
+        #         "1 GWh",
+        #         "10 GWh",
+        #         "100 GWh",
+        #         "1 TWh"
+        #     ]
+        # )
+
+        # fig.update_traces(
+        #     hovertemplate=
+        #     "Consommation : %{x:,.0f} MWh<br>" +
+        #     "Communes : %{y}<extra></extra>"
+        # )filtered_df["log_conso"] = np.log10(filtered_df["Conso totale (MWh)"])
+
         fig = px.histogram(
-            filtered_df, 
-            x="Conso totale (MWh)", 
-            nbins=60,
-            title=f"Répartition en {selected_year}",
-            #range_y=[0, df["Conso totale (MWh)"].max() * 1.1], # Garder une échelle Y fixe
-            labels={
-                "Conso totale (MWh)": "Consommation totale (MWh)",
-                "count": "Nombre de communes"
-            },
-            #log_x=True
+            filtered_df,
+            x="log_conso",
+            nbins=50,
+            title=f"Répartition en {selected_year}"
         )
 
-        # Cosmétique
-        #fig.update_xaxes(type="log")# échelle logarithmique pour une meilleure lisibilité
-        fig.update_layout(transition_duration=500)
-        
+        fig.update_xaxes(
+            tickvals=np.arange(0, 7, 0.5),  # log10 : pas de 0.5
+            ticktext=[
+                "1 MWh", "3 MWh",
+                "10 MWh", "30 MWh",
+                "100 MWh", "300 MWh",
+                "1 GWh", "3 GWh",
+                "10 GWh", "30 GWh",
+                "100 GWh", "300 GWh",
+                "1 TWh"
+            ],
+            title="Consommation totale"
+        )
+
+        fig.update_yaxes(title="Nombre de communes")
+
+        fig.update_traces(
+            hovertemplate=
+            "Consommation : %{x:.1f} log10(MWh)<br>" +
+            "Communes : %{y}<extra></extra>"
+        )
+
         return fig
 # --- END CALLBACK ---
