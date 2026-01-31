@@ -5,8 +5,9 @@ from src.utils.common_fuctions import select_data
 
 level = "region"
 year = 2011
+consumption_type = "Conso totale (MWh)"
 
-data, geojson, col_name, key_on, hover = select_data(level,year)
+data, geojson, col_name, key_on, hover = select_data(level,year,consumption_type)
 
 fig = px.choropleth_map(
         data_frame=data,
@@ -18,7 +19,7 @@ fig = px.choropleth_map(
         hover_name= hover,
         hover_data={
             col_name: True,             
-            "Conso totale (MWh)": ":,.0f",  
+            "Conso totale (MWh)": ": .0f",  
         },
         center={"lat": 46.6, "lon": 2.5},  # centre de la France
         zoom=5,
@@ -64,6 +65,15 @@ layout = html.Div([
                                         {'label': 'Région', 'value': "region"},
                                     ],
                                     value="region",
+                                ),
+                                html.Label('Type de consommation'),
+                                dcc.Dropdown(
+                                    id="type-dropdown",
+                                    options=[
+                                        {'label': 'Consommation totale', 'value': "Conso totale (MWh)"},
+                                        {'label': 'Consommation moyenne', 'value': "Conso moyenne (MWh)"},
+                                    ],
+                                    value="Conso totale (MWh)",
                                 )
                                 ],
                                 style={
@@ -86,63 +96,66 @@ layout = html.Div([
                             ),
                         
                         html.Div(id="desc",
-                                 children=f'''
-                            Cette carte intéractive représente la somme de la consommation totale de chaque régions et département de France entre 2011 et 2024.
-                            \n
-                            La carte met en évidence une forte disparité géographique de la consommation d’électricité sur le territoire français.
-                            Certaines zones apparaissent nettement plus consommatrices (teintes foncées)
-                            D’autres, plus rurales ou moins peuplées, présentent une consommation nettement plus faible (teintes claires)
-                            Cette hétérogénéité reflète avant tout des différences de population, d’activités économiques et d’usages énergétiques.
-                            \n\n
-                            Les régions et départements les plus foncés correspondent majoritairement à :
-                            Grandes métropoles
-                            Exemples visibles sur la carte :
-                            Île-de-France
-                            Grandes agglomérations du Nord et du Sud-Est (Lille, Lyon, Marseille)
-                            \n
-                            Pourquoi?
-                            Forte densité de population
-                            Concentration de bureaux, transports, services
-                            Usage massif de l’électricité (tertiaire, logements collectifs, data centers…)
+                                 children=[
+                                    html.H3("Annalyse des données"),
+                                    html.H4("Vue d’ensemble de la consommation électrique"),
+                                    html.P(
+                                        "Cette carte interactive représente la somme de la consommation totale d’électricité par région et par département en France entre 2011 et 2024. "
+                                        "Elle met en évidence une forte hétérogénéité spatiale de la consommation sur le territoire français, avec des écarts marqués entre les zones fortement urbanisées "
+                                        "et les territoires plus ruraux. Les teintes foncées traduisent une consommation élevée, tandis que les teintes claires indiquent une consommation plus modérée, "
+                                        "illustrant une répartition loin d’être uniforme à l’échelle nationale."
+                                    ),
 
-                            Territoires industrialisés
-                            Certaines zones très foncées peuvent aussi s’expliquer par :
-                            Présence d’industries lourdes (sidérurgie, chimie, agroalimentaire)
-                            Activités portuaires ou logistiques
-                            Zones économiques spécifiques
-                            Même avec une population modérée, l’industrie peut entraîner une consommation électrique élevée.
-                            \n\n
-                            Les départements les plus clairs se situent principalement :
-                            Dans des zones rurales
-                            Avec une faible densité de population
-                            Peu industrialisées
-                            \n
-                            Explications possibles :
-                            Moins d’habitants → moins de logements à alimenter
-                            Activité économique limitée
-                            Habitat individuel parfois chauffé autrement que par l’électricité (bois, fioul, gaz)
-                            \n\n
-                            Le passage à l’échelle départementale permet d’observer des nuances importantes :
-                            Une région globalement moyenne peut cacher :
-                            un département très consommateur
-                            entouré de départements beaucoup plus sobres
-                            \n
-                            Cela montre que :
-                            la consommation n’est pas homogène à l’intérieur d’une région
-                            l’échelle fine est essentielle pour comprendre les dynamiques locales
+                                    html.H4("Influence de la population et de l’urbanisation"),
+                                    html.P(
+                                        "Les régions et départements les plus consommateurs correspondent majoritairement à de grandes métropoles et agglomérations telles que l’Île-de-France, "
+                                        "Lille, Lyon ou Marseille. Cette surconsommation s’explique en grande partie par la densité de population et la concentration des activités urbaines : "
+                                        "services, bureaux, réseaux de transport, logements collectifs et infrastructures numériques. "
+                                        "L’usage intensif de l’électricité dans le secteur tertiaire et résidentiel contribue ainsi fortement à l’intensité observée dans ces territoires."
+                                    ),
 
-                            La consommation électrique d’un territoire dépend principalement de :
-                            Population et densité
-                            Activité industrielle
-                            Urbanisation
-                            Présence du secteur tertiaire
-                            Usages domestiques (chauffage, climatisation)
-                            Infrastructures de transport
-                            La carte illustre donc une combinaison de facteurs socio-économiques, plus qu’un simple effet géographique.
+                                    html.H4("Rôle de l’activité industrielle"),
+                                    html.P(
+                                        "La population n’est toutefois pas le seul facteur déterminant de la consommation électrique. Certaines zones apparaissent très consommatrices malgré "
+                                        "une densité de population plus modérée, en raison de leur forte activité industrielle. "
+                                        "Les régions industrialisées, comme les Hauts-de-France, concentrent des industries lourdes telles que la sidérurgie, la chimie ou l’agroalimentaire, "
+                                        "ainsi que des plateformes logistiques et portuaires. "
+                                        "À titre d’exemple, les Hauts-de-France affichent environ 100 millions de MWh de consommation totale pour près de 6 millions d’habitants, "
+                                        "contre environ 140 millions de MWh pour l’Île-de-France, qui compte pourtant deux fois plus d’habitants."
+                                    ),
 
-                            La consommation d’électricité en France n’est pas uniformément répartie.
-                            Elle est fortement corrélée à l’urbanisation, à l’activité économique et à la densité de population, ce qui explique les écarts marqués observés entre les territoires.
-                        ''',
+                                    html.H4("Territoires faiblement consommateurs"),
+                                    html.P(
+                                        "À l’inverse, les départements les plus clairs sur la carte se situent majoritairement dans des zones rurales ou peu urbanisées, "
+                                        "caractérisées par une faible densité de population et une activité économique limitée. "
+                                        "Dans ces territoires, la consommation électrique est réduite en raison d’un nombre moindre de logements, "
+                                        "d’un tissu industriel peu développé et de modes de chauffage parfois alternatifs à l’électricité, "
+                                        "comme le bois, le fioul ou le gaz."
+                                    ),
+
+                                    html.H4("Apport de l’échelle départementale"),
+                                    html.P(
+                                        "Le passage à une échelle départementale permet de mettre en évidence des nuances importantes au sein même des régions. "
+                                        "Une région globalement moyenne peut masquer de forts contrastes internes, avec un département très consommateur entouré "
+                                        "de départements nettement plus sobres. "
+                                        "Cette lecture à échelle fine souligne que la consommation électrique n’est pas homogène au sein d’un même territoire régional "
+                                        "et qu’une analyse détaillée est essentielle pour comprendre les dynamiques locales."
+                                    ),
+
+                                    html.H4("Lecture globale et facteurs explicatifs"),
+                                    html.P(
+                                        "La consommation d’électricité d’un territoire dépend ainsi d’une combinaison de facteurs socio-économiques : "
+                                        "densité et répartition de la population, degré d’urbanisation, poids de l’activité industrielle et tertiaire, "
+                                        "usages domestiques de l’énergie ainsi que présence d’infrastructures de transport et de services. "
+                                        "La carte illustre donc une logique multifactorielle, mettant en lumière des disparités structurelles "
+                                        "plutôt qu’un simple effet géographique."
+                                    ),
+
+
+
+
+                                            
+                        ],
                         style={
                             "margin":"auto",
                             "width":"50vw",
@@ -154,83 +167,28 @@ def register_callback(app):
     @app.callback(
         Output(component_id='map', component_property='figure'), 
         Output(component_id='H1', component_property='children'),
-        Output(component_id="desc",component_property='children'),
         [Input(component_id='year-dropdown', component_property='value'),
-         Input(component_id='scale-dropdown', component_property='value')] # (2)
+         Input(component_id='scale-dropdown', component_property='value'),
+         Input(component_id="type-dropdown", component_property="value")
+         ]
     )
-    def update_figure(year, scale): # (3)
-        data, geojson, col_name, key_on, hover = select_data(scale,year)
+    def update_figure(year, scale,cons_type): 
+        data, geojson, col_name, key_on, hover = select_data(scale,year,cons_type)
         fig = px.choropleth_map(
             data_frame=data,
             geojson=geojson,
             featureidkey=key_on,
             locations=col_name,
-            color="Conso totale (MWh)",
+            color=cons_type,
             color_continuous_scale="YlGn",  
             hover_name= hover,
             hover_data={
                 col_name: True,             
-                "Conso totale (MWh)": ":,.0f",  
+                cons_type: ": .0f",  
             },
             center={"lat": 46.6, "lon": 2.5},  # centre de la France
             zoom=5,
             ) # (4)
         title = f"Carte de la consommation d'électricité totale entre {year} au niveau {scale}"
-        desc = f'''
-                            Cette carte intéractive représente la somme de la consommation totale de chaque régions et département de France entre 2011 et 2024.
-                            \n
-                            La carte met en évidence une forte disparité géographique de la consommation d’électricité sur le territoire français.
-                            Certaines zones apparaissent nettement plus consommatrices (teintes foncées)
-                            D’autres, plus rurales ou moins peuplées, présentent une consommation nettement plus faible (teintes claires)
-                            Cette hétérogénéité reflète avant tout des différences de population, d’activités économiques et d’usages énergétiques.
-                            \n\n
-                            Les régions et départements les plus foncés correspondent majoritairement à :
-                            Grandes métropoles
-                            Exemples visibles sur la carte :
-                            Île-de-France
-                            Grandes agglomérations du Nord et du Sud-Est (Lille, Lyon, Marseille)
-                            \n
-                            Pourquoi?
-                            Forte densité de population
-                            Concentration de bureaux, transports, services
-                            Usage massif de l’électricité (tertiaire, logements collectifs, data centers…)
-
-                            Territoires industrialisés
-                            Certaines zones très foncées peuvent aussi s’expliquer par :
-                            Présence d’industries lourdes (sidérurgie, chimie, agroalimentaire)
-                            Activités portuaires ou logistiques
-                            Zones économiques spécifiques
-                            Même avec une population modérée, l’industrie peut entraîner une consommation électrique élevée.
-                            \n\n
-                            Les départements les plus clairs se situent principalement :
-                            Dans des zones rurales
-                            Avec une faible densité de population
-                            Peu industrialisées
-                            \n
-                            Explications possibles :
-                            Moins d’habitants → moins de logements à alimenter
-                            Activité économique limitée
-                            Habitat individuel parfois chauffé autrement que par l’électricité (bois, fioul, gaz)
-                            \n\n
-                            Le passage à l’échelle départementale permet d’observer des nuances importantes :
-                            Une région globalement moyenne peut cacher :
-                            un département très consommateur
-                            entouré de départements beaucoup plus sobres
-                            \n
-                            Cela montre que :
-                            la consommation n’est pas homogène à l’intérieur d’une région
-                            l’échelle fine est essentielle pour comprendre les dynamiques locales
-
-                            La consommation électrique d’un territoire dépend principalement de :
-                            Population et densité
-                            Activité industrielle
-                            Urbanisation
-                            Présence du secteur tertiaire
-                            Usages domestiques (chauffage, climatisation)
-                            Infrastructures de transport
-                            La carte illustre donc une combinaison de facteurs socio-économiques, plus qu’un simple effet géographique.
-
-                            La consommation d’électricité en France n’est pas uniformément répartie.
-                            Elle est fortement corrélée à l’urbanisation, à l’activité économique et à la densité de population, ce qui explique les écarts marqués observés entre les territoires.
-                '''
-        return fig,title,desc
+        
+        return fig,title
