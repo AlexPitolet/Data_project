@@ -71,7 +71,6 @@ layout = html.Div([
         html.Li("Python 3.1x.x"),
         html.Li("pandas"),
         html.Li("numpy"),
-        html.Li("matplotlib"),
         html.Li("dash"),
         html.Li("plotly-express"),
     ]),
