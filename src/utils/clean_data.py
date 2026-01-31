@@ -6,7 +6,7 @@ import shutil
 import os
 
 CLEAN_DATA_DIR = "data/cleaned"
-NB_DATA = 10 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
+NB_DATA = 11 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
 
 
 def clean_geojson():   
@@ -35,6 +35,9 @@ def clean_csv():
     
     dep = df.groupby(["Code Département","Année","Nom Département"],as_index=False)["Conso moyenne (MWh)"].mean().reset_index()
     dep.to_csv("data/cleaned/conso_moy_departements.csv")   #8
+
+    reg = df.groupby(["Code Région","Année","Nom Région"],as_index=False)["Conso moyenne (MWh)"].mean().reset_index()
+    reg.to_csv("data/cleaned/conso_moy_regions.csv")    #9
     
     cols1 = data.loc[:,"OPERATEUR" : "Code Commune"].columns
     cols2 = data.loc[:,"Code Département" : "CODE GRAND SECTEUR"].columns

@@ -12,16 +12,16 @@ def select_csv(level, consumption_type:Literal["Conso totale (MWh)","Conso moyen
         elif(level == "region"):
             csv_filename = "conso_totale_regions.csv"
         else: 
-            print(f"Erreur de level : {level}\nLevel mis à region")
+            print(f"Erreur de level : {level}\n")
             return
 
     elif (consumption_type == "Conso moyenne (MWh)"):
         if(level == "departement"):
             csv_filename = "conso_moy_departements.csv"
         elif(level == "region"):
-            csv_filename = "conso_per_region.csv"
+            csv_filename = "conso_moy_regions.csv"
         else: 
-            print(f"Erreur de level : {level}\nLevel mis à region")
+            print(f"Erreur de level : {level}\n")
             return
     else: 
         print(f"Erreur de type de consommation : {consumption_type};\nType de consommation automatiquement mis à \"Conso totale (MWh)\"")
@@ -44,7 +44,7 @@ def select_data(level:Literal["departement","region"],year,consumption_type:Lite
         col_name = 'Code Département'
         hover = 'Nom Département'
         data[col_name] = data[col_name].astype(str).str.zfill(2) # Evitement de l'incompatibilité entre les codes dep du csv et du geojson
-        #data = data.groupby([col_name,hover],as_index=False)[consumption_type].sum()
+        data = data.groupby([col_name,hover],as_index=False)[consumption_type].sum()
 
         geojson_path = os.path.join(DATA_DIR,"departements.geojson")
         with open(geojson_path) as f:
@@ -58,7 +58,7 @@ def select_data(level:Literal["departement","region"],year,consumption_type:Lite
         col_name = 'Code Région'
         hover = 'Nom Région'
         data[col_name] = data[col_name].astype(str).str.zfill(2) # Evitement de l'incompatibilité entre les codes dep du csv et du geojson
-        #data = data.groupby([col_name,hover],as_index=False)[consumption_type].sum()
+        data = data.groupby([col_name,hover],as_index=False)[consumption_type].sum()
         
         geojson_path = os.path.join(DATA_DIR,"regions.geojson")
         with open(geojson_path) as f:
