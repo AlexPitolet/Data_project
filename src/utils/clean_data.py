@@ -4,7 +4,7 @@ import shutil
 import os
 
 CLEAN_DATA_DIR = "data/cleaned"
-NB_DATA = 9 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
+NB_DATA = 8 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
 
 
 def clean_geojson():   
@@ -45,7 +45,7 @@ def clean_csv():
     cols5 = ["Taux de chauffage électrique"]
 
     df = data.loc[:,cols1.tolist()+ cols2.tolist()+ cols3.tolist()+ cols4.tolist()+ cols5]
-    #print(df.info())
+    df = df.replace([np.inf, -np.inf], np.nan)
     conso_moy_per_region ={}
     annees = df["Année"].unique()
     for annee in annees : 
@@ -57,21 +57,14 @@ def clean_csv():
                 mean_conso = df_region["Conso moyenne (MWh)"].mean()
                 conso_moy_per_region[(int)(annee)][df_region["Nom Région"].mode()[0]] = (float)(mean_conso) #ajouter le mode au prétraitement ? 
 
-    #print(conso_moy_per_region)
-
-    df_grouped = df.groupby(['Année', 'Nom Région'])['Conso moyenne (MWh)'].mean().reset_index()
-    df_grouped.to_csv("data/cleaned/conso_per_region.csv")
 
     df_final = pd.DataFrame([
         {"Année": annee, "Nom Région": reg, "Conso moyenne (MWh)": val}
         for annee, regions in conso_moy_per_region.items()
         for reg, val in regions.items()
     ])
-    df_final.to_csv("data/cleaned/conso_per_region2.csv")
-
-    #df_conso_moy_per_region = pd.DataFrame.from_dict(conso_moy_per_region, orient= 'index', columns=["Conso moyenne (MWh)"])
-    #df_conso_moy_per_region.index.name = "Nom Région"
-    #conso_moy_per_region_csv =df_conso_moy_per_region.to_csv("data/cleaned/conso_per_region.csv")
+    df_final["Conso moyenne (MWh)"] = df_final["Conso moyenne (MWh)"].replace([np.inf, -np.inf], np.nan).fillna(0)
+    df_final.to_csv("data/cleaned/conso_per_region.csv")
 
 
 def clean_data():

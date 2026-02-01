@@ -8,6 +8,7 @@ import numpy as np
 df = pd.read_csv("data/cleaned/conso_per_region.csv")
 df["Année"] = df["Année"].astype(int)
 annees_disponibles = sorted(df["Année"].unique())
+toutes_les_regions = sorted(df["Nom Région"].unique())
 
 layout = html.Div(children=[
 
@@ -83,6 +84,9 @@ def register_callback(app):
     def update_figure(_,__):
         # 1. Filtrer le dataframe selon l'année choisie
 
+        df["Conso moyenne (MWh)"] = df["Conso moyenne (MWh)"].replace([np.inf, -np.inf], 0).fillna(0)
+
+
         fig = px.bar(
             df,
             x="Nom Région",
@@ -90,6 +94,7 @@ def register_callback(app):
             color="Nom Région",
             animation_frame="Année",
             title="Consommation d'énergie moyenne par région",
+            category_orders={"Nom Région": toutes_les_regions},
             range_y=[0, df["Conso moyenne (MWh)"].max() * 1.1]
         )
 

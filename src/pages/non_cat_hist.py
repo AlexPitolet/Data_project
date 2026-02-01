@@ -62,7 +62,7 @@ def register_callback(app):
         #print(df_year[df_year["Année"] == selected_year]["Code Commune"].nunique())
 
         df_year = df_year[df_year["Conso totale (MWh)"] > 0]
-        df_tres_faible = df_year[df_year["Conso totale (MWh)"] < 1]
+        df_tres_faible = df_year[df_year["Conso totale (MWh)"] <= 1]
         
         nb_tres_faible = df_tres_faible["Code Commune"].nunique()
 
@@ -74,7 +74,8 @@ def register_callback(app):
             df_log,
             x="log_conso",
             nbins=50,
-            title=f"Répartition en {selected_year}"
+            title=f"Répartition en {selected_year}",
+            hover_data={"log_conso": False, "Conso totale (MWh)": ":,.0f"}
         )
 
         fig.update_xaxes(
@@ -95,12 +96,12 @@ def register_callback(app):
 
         fig.update_traces(
             hovertemplate=
-            "Consommation : %{x:.1f} log10(MWh)<br>" +
+            "<b>Consommation approx. :</b> 10^%{x:.1f} MWh<br>" +
             "Communes : %{y}<extra></extra>"
         )
 
         fig.add_annotation(
-            text=f"Communes à très faible consommation (< 1 MWh) : {nb_tres_faible}",
+            text=f"Communes à très faible consommation (<= 1 MWh) : {nb_tres_faible}",
             xref="paper",
             yref="paper",
             x=0.99,
