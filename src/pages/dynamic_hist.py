@@ -1,4 +1,3 @@
-from dash import html
 import pandas as pd
 import plotly.express as px
 from dash import dcc, html, Input, Output
@@ -11,7 +10,7 @@ annees_disponibles = sorted(df["Année"].unique())
 
 layout = html.Div(children=[
 
-                        html.H1(children=f'Histogramme dynamique représentant la consommation moyenne d\'énergie par région ',
+                        html.H1(children='Histogramme dynamique représentant la consommation moyenne d\'énergie par région ',
                                     style={'textAlign': 'center', 'color': '#7FDBFF'}), # (5)
 
                         html.Div([

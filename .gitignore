@@ -8,9 +8,9 @@ wheels/
 
 # Virtual environments
 .venv
+.ruff_cache
+
 
 #data (to big for github more than 1 Go)
 data 
 
-# unused files 
-mainAntoine
