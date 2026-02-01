@@ -4,7 +4,7 @@ layout = html.Div([
     html.H2("À propos"),
     html.H4("Présentation du projet"),
     html.P(
-            "Ce projet a été réalisé dans le cadre de l’UE Projet Multidisciplinaire 1. "
+            "Ce projet a été réalisé par Alex PITOLET et Antoine MARMOL dans le cadre de l’UE Projet Multidisciplinaire 1. "
             "Il vise à analyser la consommation d’électricité en France à travers une approche "
             "géographique et temporelle, afin de mettre en évidence les disparités territoriales "
             "et les dynamiques de consommation entre 2011 et 2024."
@@ -66,6 +66,24 @@ layout = html.Div([
             "Un chantier de design pourrait être bénéfique pour rendre le dashboard plus visuel. "
             ""
         ),
+    html.H4("Organisation du projet"),
+    html.Ul([
+        html.Li([
+            html.B("Antoine – Carte & récupération des données : "),
+            "recupération des données (pipeline get_data.py url → data/raw), et nettoyage des données pour la carte, "
+            "conception et implémentation de la carte intéractive, "
+            "structuration de l’application Dash (navigation multi-pages, callbacks, composants), "
+            "et gestion de l’interactivité globale du dashboard."
+            "ainsi que la rédaction des pages descriptives et des contenus d’analyse de la carte."
+        ]),
+        html.Li([
+            html.B("Alex – Histogrammes & traitement des données : "),
+            "nettoyage et préparation des données (pipeline data/raw → data/cleaned) pour les histogrammes, "
+            "développement de l’histogramme dynamique basé sur une variable non catégorielle, "
+            "création de l’histogramme catégoriel, "
+            "ainsi que la rédaction des pages descriptives et des contenus d’analyse liés aux histogrammes. "
+        ]),
+    ]),
     html.H4("Technologies utilisées"),
     html.Ul([
         html.Li("Python 3.1x.x"),
