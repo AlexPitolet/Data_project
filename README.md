@@ -117,7 +117,7 @@ The application is a multi-page Dash dashboard:
     - Its own callbacks via a register_callback(app) function
 - This design avoids callback conflicts and keeps each page independent
 
-## Rapport d'analyse
+## Analysis report
 The dashboard highlights strong geographical disparities in electricity consumption across France.
 
 Key observations:
