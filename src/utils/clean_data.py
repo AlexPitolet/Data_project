@@ -21,7 +21,7 @@ def clean_geojson():
 
 
 def clean_csv():
-    data = pd.read_csv("data/raw/consommation-annuelle-d-electricite-et-gaz-par-commune.csv")
+    data = pd.read_csv("data/raw/consommation-annuelle-d-electricite-et-gaz-par-commune.csv", low_memory=False)
     df = data[["Année","Code Région","Nom Région","Code Département","Nom Département","Code Commune","Conso totale (MWh)","Conso moyenne (MWh)"]]
     df.replace([np.inf, -np.inf], np.nan, inplace=True)
     df.to_csv("data/cleaned/conso_totale.csv")     #5
@@ -46,8 +46,12 @@ def clean_csv():
 
     df = data.loc[:,cols1.tolist()+ cols2.tolist()+ cols3.tolist()+ cols4.tolist()+ cols5]
     df = df.replace([np.inf, -np.inf], np.nan)
+    
+    region_mapping = df[["Code Région", "Nom Région"]].drop_duplicates().set_index("Code Région")["Nom Région"].to_dict() #mapping code région -> nom région
+    
     conso_moy_per_region ={}
     annees = df["Année"].unique()
+    
     for annee in annees : 
         df_annee = df[df["Année"] == annee]
         conso_moy_per_region[annee] = {}
@@ -56,6 +60,8 @@ def clean_csv():
             if(not df_region.empty) : 
                 mean_conso = df_region["Conso moyenne (MWh)"].mean()
                 conso_moy_per_region[(int)(annee)][df_region["Nom Région"].mode()[0]] = (float)(mean_conso) #ajouter le mode au prétraitement ? 
+            else : 
+                conso_moy_per_region[(int)(annee)][region_mapping[region]] = 0.0
 
 
     df_final = pd.DataFrame([
@@ -63,6 +69,7 @@ def clean_csv():
         for annee, regions in conso_moy_per_region.items()
         for reg, val in regions.items()
     ])
+    df_final = df_final.sort_values(by=["Année", "Nom Région"]).reset_index(drop=True)
     df_final["Conso moyenne (MWh)"] = df_final["Conso moyenne (MWh)"].replace([np.inf, -np.inf], np.nan).fillna(0)
     df_final.to_csv("data/cleaned/conso_per_region.csv")
 

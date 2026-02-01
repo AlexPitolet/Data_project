@@ -4,12 +4,7 @@ import plotly.express as px
 from dash import dcc, html, Input, Output
 
 
-df = pd.read_csv("data/cleaned/conso_totale.csv")
-#df["Année"] = df["Année"].astype(int)
-# print(df[df["Année"] == 2019]["Code Commune"].nunique())
-# print(df["Code Commune"].nunique())
-
-
+df = pd.read_csv("data/cleaned/conso_totale.csv", low_memory=False) # pour les warnings
 annees_disponibles = sorted(df["Année"].unique())
 df_hist = df[["Code Commune", "Conso totale (MWh)", "Année"]]
 
@@ -59,7 +54,6 @@ def register_callback(app):
     def update_figure(selected_year):
         df_year = df_hist[df_hist["Année"] == selected_year]  # d'abord filtrer par année
         df_year = df_year.groupby("Code Commune", as_index=False).agg({"Conso totale (MWh)": "sum"})
-        #print(df_year[df_year["Année"] == selected_year]["Code Commune"].nunique())
 
         df_year = df_year[df_year["Conso totale (MWh)"] > 0]
         df_tres_faible = df_year[df_year["Conso totale (MWh)"] <= 1]

@@ -37,10 +37,10 @@ def select_data(level:Literal["departement","region"],year:int,consumption_type:
     if year == None:
         print(f"Erreur d'année : {year};\nAnnée automatiquement mis à 2011")
         year = 2011
+    data = select_csv(level, consumption_type)
+    data = data.loc[data['Année'] == year].copy()
 
     if level == "departement":
-        data = select_csv(level, consumption_type)
-        data = data.query(f"Année=={year}")
         col_name = 'Code Département'
         hover = 'Nom Département'
         data[col_name] = data[col_name].astype(str).str.zfill(2) # Evitement de l'incompatibilité entre les codes dep du csv et du geojson
@@ -53,8 +53,6 @@ def select_data(level:Literal["departement","region"],year:int,consumption_type:
         key_on = 'properties.code'
 
     elif level == "region":
-        data = select_csv(level, consumption_type)
-        data = data.query(f"Année=={year}")
         col_name = 'Code Région'
         hover = 'Nom Région'
         data[col_name] = data[col_name].astype(str).str.zfill(2) # Evitement de l'incompatibilité entre les codes dep du csv et du geojson

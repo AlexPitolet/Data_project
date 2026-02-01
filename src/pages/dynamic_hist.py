@@ -1,11 +1,10 @@
 import pandas as pd
 import plotly.express as px
 from dash import dcc, html, Input, Output
-
 import numpy as np
 
 df = pd.read_csv("data/cleaned/conso_per_region.csv")
-df["Année"] = df["Année"].astype(int)
+#df["Année"] = df["Année"].astype(int)
 annees_disponibles = sorted(df["Année"].unique())
 toutes_les_regions = sorted(df["Nom Région"].unique())
 
@@ -81,19 +80,15 @@ def register_callback(app):
         Input('year-slider', 'value')
     )
     def update_figure(_,__):
-        # 1. Filtrer le dataframe selon l'année choisie
-
-        df["Conso moyenne (MWh)"] = df["Conso moyenne (MWh)"].replace([np.inf, -np.inf], 0).fillna(0)
-
-
+        temp_df = df.copy() #évite les warnings, impact minime sur la performance
+        temp_df["Conso moyenne (MWh)"] = temp_df["Conso moyenne (MWh)"].replace([np.inf, -np.inf], 0).fillna(0)
         fig = px.bar(
-            df,
+            temp_df,
             x="Nom Région",
             y="Conso moyenne (MWh)",
             color="Nom Région",
             animation_frame="Année",
             title="Consommation d'énergie moyenne par région",
-            category_orders={"Nom Région": toutes_les_regions},
             range_y=[0, df["Conso moyenne (MWh)"].max() * 1.1]
         )
 
@@ -103,8 +98,10 @@ def register_callback(app):
             xaxis_title="Région",
             yaxis_title="Consommation moyenne (MWh)",
             xaxis_tickangle=-45,
-            showlegend=False
+            showlegend=False,
+            yaxis=dict(type='linear')
         )
+        fig.update_xaxes(categoryorder='array', categoryarray=toutes_les_regions)
 
         fig.update_traces(
             hovertemplate=
@@ -119,7 +116,7 @@ def register_callback(app):
         Input('year-slider', 'value')
     )
     def update_reference(selected_metric, selected_year):
-        filtered_df = df[df["Année"] == selected_year]
+        filtered_df = df[df["Année"] == selected_year].copy()
         filtered_df["Conso moyenne (MWh)"] = filtered_df["Conso moyenne (MWh)"].replace([np.inf, -np.inf], np.nan).fillna(0)
         if selected_metric == "mean":
             val = filtered_df["Conso moyenne (MWh)"].mean()
