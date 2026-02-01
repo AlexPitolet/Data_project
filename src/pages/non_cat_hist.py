@@ -38,13 +38,13 @@ layout = html.Div(children=[
 
                                     html.H4("Description du graphique"),
                                     html.P(
-                                        "Ce graphe montre la distribution de la consommation totale d’électricité (en MWh) des communes françaises."
+                                        "Ce graphe montre la distribution de la consommation totale d’électricité (en MWh) des communes françaises. "
                                         "Chaque barre de l’histogramme représente un intervalle de valeurs de consommation, et sa hauteur correspond "
-                                        "au nombre de communes dont la consommation se situe dans cet intervalle."
-                                        "L’axe horizontal indique les classes de consommation, tandis que l’axe vertical traduit la fréquence des communes associées à chaque classe."
-                                        "Ce type de représentation permet d’analyser la répartition globale des consommations, de mettre en évidence"
-                                        "une éventuelle asymétrie, ainsi que la présence de communes fortement consommatrices par rapport à la majorité."
-                                        "Passez la souris sur les barres pour obtenir des informations détaillées sur chaque intervalle."
+                                        "au nombre de communes dont la consommation se situe dans cet intervalle. "
+                                        "L’axe horizontal indique les classes de consommation, tandis que l’axe vertical traduit la fréquence des communes associées à chaque classe. "
+                                        "Ce type de représentation permet d’analyser la répartition globale des consommations, de mettre en évidence "
+                                        "une éventuelle asymétrie, ainsi que la présence de communes fortement consommatrices par rapport à la majorité. "
+                                        "Passez la souris sur les barres pour obtenir des informations détaillées sur chaque intervalle. "
                                     ),
 
                                     html.H4("Interprétation de l'échelle logarithmique"),
@@ -61,7 +61,7 @@ layout = html.Div(children=[
                                         "la présence de communes à 'très faible consommation' (indiquées en haut à droite du graphique) "
                                         "met en lumière l'écart abyssal entre les plus petits villages et les grandes métropoles. Ces communes, consommant moins de 1 MWh par an, "
                                         "correspondent à des zones très peu peuplées  où les "
-                                        "points de livraison électrique sont quasi inexistants. On trouve également des communes dont"
+                                        "points de livraison électrique sont quasi inexistants. On trouve également des communes dont "
                                         "la consommation est aberrament élevée, souvent liées à des activités industrielles lourdes ou à de grandes agglomérations."
                                     ),
 

@@ -74,7 +74,7 @@ layout = html.Div(children=[
                                     html.P(
                                         "Un changement significatif dans la collecte des données s'est opéré en 2018. La méthodologie de comptage des sites de livraison "
                                         "a été réformée, affectant le calcul de la consommation moyenne par région. "
-                                        "La base de division ayant augmenté, la moyenne par site a mécaniquement chuté."
+                                        "La base de division ayant augmenté, la moyenne par site a mécaniquement chuté. "
                                         "On estime cette baisse à environ 50" "%" ", concernant toutes les régions après le passage de 2017 à 2018. "
                                         "Cependant, cette baisse est principalement un artefact statistique dû au changement de méthodologie de comptage, et non une diminution réelle de la consommation d'énergie. "
                                         "Les utilisateurs doivent être conscients de ce changement méthodologique lors de la comparaison des données antérieures à 2018 avec 2018 et après. "
@@ -85,18 +85,18 @@ layout = html.Div(children=[
                                     html.P(
                                         "Les données pour certaines régions comme la Corse ou la Guyane peuvent afficher des valeurs nulles ou "
                                         "très faibles sur certaines périodes. Cela traduit souvent une remontée de données incomplète dans les fichiers "
-                                        "sources open-data pour ces zones géographiques spécifiques avant leur intégration complète."
+                                        "sources open-data pour ces zones géographiques spécifiques avant leur intégration complète. "
                                         "Par convention, ces valeurs nulles sont prises en compte dans le calcul des métriques"
-                                        "Par conséquent, plusieurs années peuvent afficher une consommation minimum de 0 MWh à cause de ces régions."
+                                        "Par conséquent, plusieurs années peuvent afficher une consommation minimum de 0 MWh à cause de ces régions. "
                                     ),
 
                                     html.H4("Facteurs de variabilité"),
                                     html.P(
-                                        "On peut en conclure ces moyennes sont influencées par plusieurs facteurs : climat, densité de population, activités et secteurs économiques dominants."
+                                        "On peut en conclure ces moyennes sont influencées par plusieurs facteurs : climat, densité de population, activités et secteurs économiques dominants. "
                                         "En guise d'exemple, les différences entre régions peuvent s'expliquent par le profil économique : les régions à forte densité industrielle "
                                         "(Hauts-de-France, Normandie) présentent souvent des moyennes par site plus élevées que les régions "
                                         "principalement résidentielles ou touristiques. De plus, certaines régions chaudes les DOM-TOM ont des consommations moyennes plus basses en raison d'un moindre besoin de chauffage. "
-                                        "Cela dit, pour mettre en lumière la pluralité des facteurs à prendre en compte, on observe que la Provence-Alpes-Côte d'Azur,"
+                                        "Cela dit, pour mettre en lumière la pluralité des facteurs à prendre en compte, on observe que la Provence-Alpes-Côte d'Azur, "
                                         "théoriquement plus chaude, affiche des consommations moyennes particulièrement élevées, probablement en raison de son urbanisation et de son tourisme intensif."
                                     ),
                                             
@@ -132,7 +132,7 @@ def register_callback(app):
 
         # Cosmétique
         fig.update_layout(
-            transition_duration=800,
+            transition_duration=80, 
             xaxis_title="Région",
             yaxis_title="Consommation moyenne (MWh)",
             xaxis_tickangle=-45,
