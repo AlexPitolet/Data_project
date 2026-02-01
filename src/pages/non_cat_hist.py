@@ -6,8 +6,8 @@ from dash import dcc, html, Input, Output
 
 df = pd.read_csv("data/cleaned/conso_totale.csv")
 #df["Année"] = df["Année"].astype(int)
-print(df[df["Année"] == 2019]["Code Commune"].nunique())
-print(df["Code Commune"].nunique())
+# print(df[df["Année"] == 2019]["Code Commune"].nunique())
+# print(df["Code Commune"].nunique())
 
 
 annees_disponibles = sorted(df["Année"].unique())
@@ -57,8 +57,10 @@ def register_callback(app):
         Input('year-slider-hist', 'value')
     )
     def update_figure(selected_year):
+        df_year = df_hist[df_hist["Année"] == selected_year]  # d'abord filtrer par année
+        df_year = df_year.groupby("Code Commune", as_index=False).agg({"Conso totale (MWh)": "sum"})
+        #print(df_year[df_year["Année"] == selected_year]["Code Commune"].nunique())
 
-        df_year = df_hist[df_hist["Année"] == selected_year]
         df_year = df_year[df_year["Conso totale (MWh)"] > 0]
         df_tres_faible = df_year[df_year["Conso totale (MWh)"] < 1]
         
@@ -66,13 +68,6 @@ def register_callback(app):
 
         df_log = df_year[df_year["Conso totale (MWh)"] >= 1]
         df_log["log_conso"] = np.log10(df_log["Conso totale (MWh)"])
-
-        
-
-        
-        
-
-        
         
 
         fig = px.histogram(
