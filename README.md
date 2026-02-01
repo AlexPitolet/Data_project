@@ -31,19 +31,19 @@ To run the dashboard locally:
 - **Zoom** : Select an area with your mouse to zoom into that region of the graph
 - **Reset** : Double-click on the graph to reset the view to its default state (useful if visualization becomes unclear)
 
-**Non-Categorical Histogram (`Total Energy Consumption Distribution`):**
+**Non-Categorical Histogram :**
 - **Year Slider** : Move the cursor to select the year to observe
 - Displays the distribution of consumption across communes for the selected year
 
-**Dynamic Histogram (`Dynamic Energy Consumption by Region`):**
+**Dynamic Histogram :**
 - **Animation Controls** : At the bottom of the graph, a control bar allows you to :
   - Play/Pause automatic animation (play/pause button)
   - Navigate manually between years by dragging the cursor
-- **Year Slider (left panel)** : Allows manual selection of the year
+- **Year Slider (left panel)** : Allows manual selection of the year. Warning, it doesn't change the graph's year, it only  affects the key indicator.
 - **Metric Dropdown (left panel)** : Choose between "National Average", "Minimum Consumption", or "Maximum Consumption"
-- **KPI (left panel)** : Displays the value of the selected metric for the current year
+- **Key indicator (left panel)** : Displays the value of the selected metric for the selected year on the slider
 
-**Known Behavior** : When you move the slider or change the dropdown, the animation frame returns to the year 2011 by default (even though the animation bar may not visually reflect this). This is due to the internal handling of Dash callbacks.
+**Known Behavior** : When you move the slider or change the dropdown, the animation frame returns to the year 2011 by default (even though the animation bar may not visually reflect this). This is due to the internal handling of Dash callbacks, and the fact that we cannot have 0 input (for a callback).
 
 ## Data
 The data used in this project comes from public open data sources under the Apache 2.0 license.
@@ -148,5 +148,25 @@ except for the following lines:
 ```python
 #1 (common_functions.py -> select_data())
 data[col_name] = data[col_name].astype(str).str.zfill(2)
+#2 (clean_data.py -> clean_cvs())
+cols1 = data.loc[:,"OPERATEUR" : "Code Commune"].columns
+########
+region_mapping = df[["Code Région", "Nom Région"]].drop_duplicates().set_index("Code Région")["Nom Région"].to_dict()
+########
+df_final = pd.DataFrame([
+    {"Année": annee, "Nom Région": reg, "Conso moyenne (MWh)": val}
+    for annee, regions in conso_moy_per_region.items()
+    for reg, val in regions.items()
+])
 # source : chat gpt
 ```
+Those lines were not all writen completely by chatgpt but it showed us how to solve some problems. For example we used the prompt: "How to select a specific group of columns by name in Pandas ?", and it returned the df.loc[:, ['col1', 'col2']] syntax. It has been a way to have quick documentation, and then we used the official doc to verify and make sure it fits our needs and then how to use it properly.
+
+Another use of chat gpt has been the different style arguments for html such as
+in dynamic_hist.py
+```html
+style={'fontSize': '12px', 'color': 'gray', 'marginTop': '10px'})
+], style={'width': '70%', 'display': 'inline-block', 'padding': '20px'})
+```
+
+
