@@ -11,7 +11,7 @@ df_hist = df[["Code Commune", "Conso totale (MWh)", "Année"]]
 
 layout = html.Div(children=[
 
-                        html.H1(children=f"Distribution de la consommation totale d'électricité des communes",
+                        html.H1(children=f"Distribution de la consommation totale d'énergie des communes",
                                     style={'textAlign': 'center', 'color': '#7FDBFF'}), 
 
                         #Year Slider

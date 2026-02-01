@@ -1,9 +1,9 @@
-# Electricity Consumption Dashboard – France (2011–2024)
+# Electricity and gas Consumption Dashboard – France (2011–2024)
 
 This project is an interactive dashboard developed as part of the **E3 FI – Multidisciplinary Project 1** at **ESIEE Paris**. 
-It focuses on the analysis and visualization of electricity consumption in France between **2011 and 2024**, at both **regional** and **departmental** levels.
+It focuses on the analysis and visualization of energy consumption in France between **2011 and 2024** through an interactive map, at both **regional** and **departmental** levels.
 
-The dashboard is built using **Python**, **Dash**, and **Plotly-express**, and aims to provide clear insights into geographical and temporal disparities in electricity usage.
+The dashboard is built using **Python**, **Dash**, and **Plotly-express**, and aims to provide clear insights into geographical and temporal disparities in electricity / gas usage.
 
 ---
 
@@ -20,10 +20,30 @@ To run the dashboard locally:
 
 ### The dashboard includes:
 - A geographical map of electricity consumption (region / department) with interactive controls (year, scale, type of consumption)
-- A dynamic histogram based on a non-categorical variable
-- A categorical histogram
-- A data analisis for each graphic
+- A dynamic histogram based on a categorical variable with interactive frame animation
+- A non-categorical histogram showing the distribution of consumption across communes
+"- Data analysis for each graphic"
 - Several explanatory pages (Home, About)
+
+#### Interactive Features
+
+**Both Histograms:**
+- **Zoom** : Select an area with your mouse to zoom into that region of the graph
+- **Reset** : Double-click on the graph to reset the view to its default state (useful if visualization becomes unclear)
+
+**Non-Categorical Histogram (`Total Energy Consumption Distribution`):**
+- **Year Slider** : Move the cursor to select the year to observe
+- Displays the distribution of consumption across communes for the selected year
+
+**Dynamic Histogram (`Dynamic Energy Consumption by Region`):**
+- **Animation Controls** : At the bottom of the graph, a control bar allows you to :
+  - Play/Pause automatic animation (play/pause button)
+  - Navigate manually between years by dragging the cursor
+- **Year Slider (left panel)** : Allows manual selection of the year
+- **Metric Dropdown (left panel)** : Choose between "National Average", "Minimum Consumption", or "Maximum Consumption"
+- **KPI (left panel)** : Displays the value of the selected metric for the current year
+
+**Known Behavior** : When you move the slider or change the dropdown, the animation frame returns to the year 2011 by default (even though the animation bar may not visually reflect this). This is due to the internal handling of Dash callbacks.
 
 ## Data
 The data used in this project comes from public open data sources under the Apache 2.0 license.
