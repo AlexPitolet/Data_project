@@ -5,7 +5,7 @@ import pandas as pd
 
 DATA_DIR = "data/cleaned"
 
-def select_csv(level, consumption_type:Literal["Conso totale (MWh)","Conso moyenne (MWh)"]):
+def select_csv(level:Literal["departement","region"], consumption_type:Literal["Conso totale (MWh)","Conso moyenne (MWh)"]):
     if(consumption_type == "Conso totale (MWh)"):
         if(level == "departement"):
             csv_filename = "conso_totale_departements.csv"
@@ -31,7 +31,7 @@ def select_csv(level, consumption_type:Literal["Conso totale (MWh)","Conso moyen
 
 
 
-def select_data(level:Literal["departement","region"],year,consumption_type:Literal["Conso totale (MWh)","Conso moyenne (MWh)"]):
+def select_data(level:Literal["departement","region"],year:int,consumption_type:Literal["Conso totale (MWh)","Conso moyenne (MWh)"]):
     """Sélectionne les bonnes données en fonction de l'échelle et de l'année"""
     
     if year == None:
