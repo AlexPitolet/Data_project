@@ -30,16 +30,57 @@ layout = html.Div(children=[
                         dcc.Graph(
                             id='non_cat_hist',
                         ), 
+                        
+                        html.Div(
+                                id="desc-hist",
+                                children=[
+                                    html.H3("Analyse de la distribution"),
+                                    
+                                    html.H4("Description du graphique"),
+                                    html.P(
+                                        "Ce graphe montre la distribution de la consommation totale d’électricité (en MWh) des communes françaises."
+                                        "Chaque barre de l’histogramme représente un intervalle de valeurs de consommation, et sa hauteur correspond "
+                                        "au nombre de communes dont la consommation se situe dans cet intervalle."
+                                        "L’axe horizontal indique les classes de consommation, tandis que l’axe vertical traduit la fréquence des communes associées à chaque classe."
+                                        "Ce type de représentation permet d’analyser la répartition globale des consommations, de mettre en évidence"
+                                        "une éventuelle asymétrie, ainsi que la présence de communes fortement consommatrices par rapport à la majorité."
+                                        "Passez la souris sur les barres pour obtenir des informations détaillées sur chaque intervalle."
+                                    ),
 
-                        html.Div(children=f'''
-                            Ce graphe montre la distribution de la consommation totale d’électricité (en MWh) des communes françaises.
-                            Chaque barre de l’histogramme représente un intervalle de valeurs de consommation, et sa hauteur correspond au nombre de communes dont la consommation se situe dans cet intervalle.
+                                    html.H4("Interprétation de l'échelle logarithmique"),
+                                    html.P(
+                                        "Ce graphique utilise une échelle logarithmique (log10) sur l'axe horizontal. "
+                                        "Cette méthode est indispensable pour visualiser simultanément des communes rurales consommant "
+                                        "quelques MWh et des métropoles dépassant le TWh (térawattheure). "
+                                    ),
 
-                            L’axe horizontal indique les classes de consommation, tandis que l’axe vertical traduit la fréquence des communes associées à chaque classe.
-                            Ce type de représentation permet d’analyser la répartition globale des consommations, de mettre en évidence une éventuelle asymétrie, ainsi que la présence de communes fortement consommatrices par rapport à la majorité.
+                                    html.H4("Hétérogénéité et disparités"),
+                                    html.P(
+                                        "La distribution révèle souvent une forme de 'courbe en cloche' décalée, indiquant que la majorité "
+                                        "des communes françaises se situent dans une tranche de consommation médiane. Cependant, "
+                                        "la présence de communes à 'très faible consommation' (indiquées en haut à droite du graphique) "
+                                        "met en lumière les disparités territoriales. Ces communes, consommant moins de 1 MWh par an, "
+                                        "ce qui peut correspondre à des zones très peu peuplées ou à des périmètres géographiques où les "
+                                        "points de livraison électrique sont quasi inexistants. On trouve également des communes dont"
+                                        "la consommation est aberrament élevée, souvent liées à des activités industrielles lourdes ou à de grandes agglomérations."
+                                    ),
 
-                            Passe la souris sur les barres pour obtenir des informations détaillées sur chaque intervalle.
-                        '''), 
+                                    html.H4("Utilité de l'analyse temporelle"),
+                                    html.P(
+                                        "En déplaçant le curseur des années, on peut observer le glissement de la distribution. "
+                                        "Un déplacement de la répartition vers la gauche pourrait traduire une amélioration globale "
+                                        "de l'efficacité énergétique ou une baisse d'activité, cependant, nous pouvons voir que la forme "
+                                        "de la courbe reste relativement stable au fil des années, on peut en déduire que peu de communes"
+                                        "ont connu des changements drastiques dans leur consommation totale d'énergie sur la période étudiée."
+                                    ),
+                                ],
+                                style={
+                                    "margin": "40px auto",
+                                    "width": "60vw",
+                                    "textAlign": "justify",
+                                    "lineHeight": "1.6"
+                                })
+    
 
 ]
 )

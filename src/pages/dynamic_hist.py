@@ -56,14 +56,56 @@ layout = html.Div(children=[
                             ], style={'width': '70%', 'display': 'inline-block', 'padding': '20px'})
                         ], style={'display': 'flex', 'flexDirection': 'row'}),
 
+                        html.Div(id="desc",
+                                 children=[
+                                    html.H3("Analyse des données"),
 
-                        html.Div(children=f'''
-                            Ce graphe montre la consommation moyenne d'électricité en MWh par 
-                            région, lissée par nombre de site pt de livraison) au sein de cette dernière.
-                            Chaque région possède sa couleur et la taille d'une barre dans l'histogramme
-                            est proportionnelle à la consommation de la région associée
-                            Passe la souris par dessus pour plus de détail.
-                        '''), 
+                                    html.H4("Description du graphique"),
+                                    html.P(
+                                        "Ce graphique représente la consommation électrique moyenne 'lissée'. Contrairement à la consommation totale, "
+                                        "cet indicateur divise l'énergie consommée par le nombre de points de livraison dans la région (compteurs). " 
+                                        "Cela permet de comparer des régions de tailles différentes (ex: Île-de-France vs Bretagne) sur une base de 'consommation par site'."
+                                        "Chaque région possède sa couleur et la taille d'une barre dans l'histogramme est proportionnelle"
+                                        "à la consommation de la région associée. N'hésitez pas à passer la souris par dessus le graphique pour plus de détails."
+                                        " L'animation (disponible via le bouton play) permet de visualiser l'évolution de cette consommation moyenne par région au fil des années."
+                                    ),
+                                    
+                                    html.H4("Changement méthodologique important en 2018"),
+                                    html.P(
+                                        "Un changement significatif dans la collecte des données s'est opéré en 2018. La méthodologie de comptage des sites de livraison "
+                                        "a été réformée, affectant le calcul de la consommation moyenne par région. "
+                                        "La base de division ayant augmenté, la moyenne par site a mécaniquement chuté."
+                                        "On estime cette baisse à environ 50" "%" ", concernant toutes les régions après le passage de 2017 à 2018. "
+                                        "Cependant, cette baisse est principalement un artefact statistique dû au changement de méthodologie de comptage, et non une diminution réelle de la consommation d'énergie. "
+                                        "Les utilisateurs doivent être conscients de ce changement méthodologique lors de la comparaison des données antérieures à 2018 avec 2018 et après. "
+                                        "Les tendances observées avant et après 2018 ne doivent pas être directement comparées sans tenir compte de cette rupture structurelle."
+                                    ),
+
+                                    html.H4("Zoom sur les Territoires d'Outre-Mer"),
+                                    html.P(
+                                        "Les données pour certaines régions comme la Corse ou la Guyane peuvent afficher des valeurs nulles ou "
+                                        "très faibles sur certaines périodes. Cela traduit souvent une remontée de données incomplète dans les fichiers "
+                                        "sources open-data pour ces zones géographiques spécifiques avant leur intégration complète."
+                                        "Par convention, ces valeurs nulles sont prises en compte dans le calcul des métriques"
+                                        "Par conséquent, plusieurs années peuvent afficher une consommation minimum de 0 MWh à cause de ces régions."
+                                    ),
+
+                                    html.H4("Facteurs de variabilité"),
+                                    html.P(
+                                        "On peut en conclure ces moyennes sont influencées par plusieurs facteurs : climat, densité de population, activités et secteurs économiques dominants."
+                                        "En guise d'exemple, les différences entre régions peuvent s'expliquent par le profil économique : les régions à forte densité industrielle "
+                                        "(Hauts-de-France, Normandie) présentent souvent des moyennes par site plus élevées que les régions "
+                                        "principalement résidentielles ou touristiques. De plus, certaines régions chaudes les DOM-TOM ont des consommations moyennes plus basses en raison d'un moindre besoin de chauffage. "
+                                        "Cela dit, pour mettre en lumière la pluralité des facteurs à prendre en compte, on observe que la Provence-Alpes-Côte d'Azur,"
+                                        "théoriquement plus chaude, affiche des consommations moyennes particulièrement élevées, probablement en raison de son urbanisation et de son tourisme intensif."
+                                    ),
+                                            
+                        ],
+                        style={
+                            "margin":"auto",
+                            "width":"50vw",
+                            "textAlign": "justify"
+                        })
 
 ]
 )
