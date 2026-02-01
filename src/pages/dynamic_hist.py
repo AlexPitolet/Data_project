@@ -4,14 +4,12 @@ from dash import dcc, html, Input, Output
 import numpy as np
 
 df = pd.read_csv("data/cleaned/conso_per_region.csv")
-#df["Année"] = df["Année"].astype(int)
 annees_disponibles = sorted(df["Année"].unique())
-toutes_les_regions = sorted(df["Nom Région"].unique())
 
 layout = html.Div(children=[
 
                         html.H1(children='Histogramme dynamique représentant la consommation moyenne d\'énergie par région ',
-                                    style={'textAlign': 'center', 'color': '#7FDBFF'}), # (5)
+                                    style={'textAlign': 'center', 'color': '#7FDBFF'}), 
 
                         html.Div([
                             # Colonne de GAUCHE : Contrôles
@@ -40,21 +38,19 @@ layout = html.Div(children=[
                                         clearable=False,
                                     ),
                                 ]),
-                                # Affichage du KPI juste en dessous des filtres
+                                # Affichage de ma métrique juste en dessous des filtres
                                 html.Div(id="reference-value", style={
                                     'marginTop': '40px',
                                     'padding': '20px',
-                                    'backgroundColor': '#f8f9fa',
+                                    'backgroundColor': "#cccdce",
                                     'borderRadius': '10px',
-                                    'textAlign': 'center',
-                                    'borderLeft': '5px solid #7FDBFF'
+                                    'textAlign': 'center'
                                 }),
                             ], style={'width': '25%', 'display': 'inline-block', 'verticalAlign': 'top', 'padding': '20px'}),
                         
                             # Colonne de DROITE : Graphique
                             html.Div([
                                 dcc.Graph(id='graphConso', style={'height': '70vh'}),
-                                
                                 html.P("Description du graphique : Ce bar chart compare la consommation lissée par point de livraison.",
                                 style={'fontSize': '12px', 'color': 'gray', 'marginTop': '10px'})
                             ], style={'width': '70%', 'display': 'inline-block', 'padding': '20px'})
@@ -67,7 +63,7 @@ layout = html.Div(children=[
                             Chaque région possède sa couleur et la taille d'une barre dans l'histogramme
                             est proportionnelle à la consommation de la région associée
                             Passe la souris par dessus pour plus de détail.
-                        '''), # (7)
+                        '''), 
 
 ]
 )
@@ -79,7 +75,7 @@ def register_callback(app):
         Input("metric-dropdown", "value"),
         Input('year-slider', 'value')
     )
-    def update_figure(_,__):
+    def update_figure(_,__): #aucun des inputs n'est utilisé pour le moment, mais plotly n'accepte pas les callbacks sans input
         temp_df = df.copy() #évite les warnings, impact minime sur la performance
         temp_df["Conso moyenne (MWh)"] = temp_df["Conso moyenne (MWh)"].replace([np.inf, -np.inf], 0).fillna(0)
         fig = px.bar(
@@ -87,9 +83,9 @@ def register_callback(app):
             x="Nom Région",
             y="Conso moyenne (MWh)",
             color="Nom Région",
-            animation_frame="Année",
+            animation_frame="Année", #permet de faire une animation par année
             title="Consommation d'énergie moyenne par région",
-            range_y=[0, df["Conso moyenne (MWh)"].max() * 1.1]
+            range_y=[0, temp_df["Conso moyenne (MWh)"].max() * 1.1] #permet d'avoir une échelle fixe pour l'axe y
         )
 
         # Cosmétique
@@ -99,14 +95,12 @@ def register_callback(app):
             yaxis_title="Consommation moyenne (MWh)",
             xaxis_tickangle=-45,
             showlegend=False,
-            yaxis=dict(type='linear')
         )
-        fig.update_xaxes(categoryorder='array', categoryarray=toutes_les_regions)
 
         fig.update_traces(
             hovertemplate=
             "Région : %{x}<br>" +
-            "Conso moyenne : %{y:.0f} MWh<extra></extra>"
+            "Conso moyenne : %{y:.0f} MWh<extra></extra>" # <extra></extra> supprime la trace générée automatiquement par plotly, mais ajoute le hover "Année"
         )
         return fig
 
@@ -116,6 +110,7 @@ def register_callback(app):
         Input('year-slider', 'value')
     )
     def update_reference(selected_metric, selected_year):
+        #calcul de la métrique sélectionnée en fonction de l'année sélectionnée
         filtered_df = df[df["Année"] == selected_year].copy()
         filtered_df["Conso moyenne (MWh)"] = filtered_df["Conso moyenne (MWh)"].replace([np.inf, -np.inf], np.nan).fillna(0)
         if selected_metric == "mean":

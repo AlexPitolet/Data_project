@@ -12,7 +12,7 @@ df_hist = df[["Code Commune", "Conso totale (MWh)", "Année"]]
 layout = html.Div(children=[
 
                         html.H1(children=f"Distribution de la consommation totale d'électricité des communes",
-                                    style={'textAlign': 'center', 'color': '#7FDBFF'}), # (5)
+                                    style={'textAlign': 'center', 'color': '#7FDBFF'}), 
 
                         #Year Slider
                         html.Div([
@@ -29,8 +29,7 @@ layout = html.Div(children=[
 
                         dcc.Graph(
                             id='non_cat_hist',
-                            #figure=fig
-                        ), # (6)
+                        ), 
 
                         html.Div(children=f'''
                             Ce graphe montre la distribution de la consommation totale d’électricité (en MWh) des communes françaises.
@@ -40,7 +39,7 @@ layout = html.Div(children=[
                             Ce type de représentation permet d’analyser la répartition globale des consommations, de mettre en évidence une éventuelle asymétrie, ainsi que la présence de communes fortement consommatrices par rapport à la majorité.
 
                             Passe la souris sur les barres pour obtenir des informations détaillées sur chaque intervalle.
-                        '''), # (7)
+                        '''), 
 
 ]
 )
@@ -53,25 +52,27 @@ def register_callback(app):
     )
     def update_figure(selected_year):
         df_year = df_hist[df_hist["Année"] == selected_year]  # d'abord filtrer par année
-        df_year = df_year.groupby("Code Commune", as_index=False).agg({"Conso totale (MWh)": "sum"})
+        # une ligne n'est pas une commune, il peut y avoir plusieurs lignes par commune (car plusieurs secteurs pour un même commune), donc on agrège et somme par commune
+        df_year = df_year.groupby("Code Commune", as_index=False).agg({"Conso totale (MWh)": "sum"}) 
 
-        df_year = df_year[df_year["Conso totale (MWh)"] > 0]
-        df_tres_faible = df_year[df_year["Conso totale (MWh)"] <= 1]
+        df_year = df_year[df_year["Conso totale (MWh)"] > 0] #on enlève les consommations nulles ou négatives pour le log
+        df_tres_faible = df_year[df_year["Conso totale (MWh)"] <= 1] #communes à très faible consommation
         
-        nb_tres_faible = df_tres_faible["Code Commune"].nunique()
+        nb_tres_faible = df_tres_faible["Code Commune"].nunique() #nombre de communes à très faible consommation, utile pour l'annotation
 
-        df_log = df_year[df_year["Conso totale (MWh)"] >= 1]
+        df_log = df_year[df_year["Conso totale (MWh)"] >= 1].copy()#on utilise que les valeurs >=1 pour éviter les valeurs négatives ou nulles dans le log
         df_log["log_conso"] = np.log10(df_log["Conso totale (MWh)"])
         
 
         fig = px.histogram(
             df_log,
             x="log_conso",
-            nbins=50,
+            nbins=50,#nombre de "slices" de l'histogramme
             title=f"Répartition en {selected_year}",
             hover_data={"log_conso": False, "Conso totale (MWh)": ":,.0f"}
         )
 
+        #On veut des ticks personnalisés pour l'axe x (logarithmique)
         fig.update_xaxes(
             tickvals=np.arange(0, 7, 0.5),  # log10 : pas de 0.5
             ticktext=[
@@ -89,9 +90,7 @@ def register_callback(app):
         fig.update_yaxes(title="Nombre de communes")
 
         fig.update_traces(
-            hovertemplate=
-            "<b>Consommation approx. :</b> 10^%{x:.1f} MWh<br>" +
-            "Communes : %{y}<extra></extra>"
+            hovertemplate="<b>Consommation approx. :</b> 10^%{x:.1f} MWh<br>" + "Communes : %{y}<extra></extra>" #permet une lisibilité potable du log
         )
 
         fig.add_annotation(
@@ -100,7 +99,7 @@ def register_callback(app):
             yref="paper",
             x=0.99,
             y=0.95,
-            showarrow=False,
+            showarrow=False, #permet l'intégration dans le graphique sans flèche
             align="right"
         )
 
