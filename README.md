@@ -48,9 +48,13 @@ To run the dashboard locally:
 ## Data
 The data used in this project comes from public open data sources under the Apache 2.0 license.
 It describes the annual electricity and gas consumption in France at the municipal level.
+If you click the page below, you will be able to access some pdfs describing the data,
+the different fields (columns) and how to interprete them. It also explains how accurate the dataset is
+and how the study has been led.
 
 Dataset source:
 https://www.data.gouv.fr/datasets/consommation-annuelle-delectricite-et-gaz-par-commune
+
 
 The data processing pipeline follows this structure:
 - data/raw/ → original datasets
@@ -136,7 +140,7 @@ These differences can be explained by a combination of factors:
 
 - Energy usage patterns (housing, transport, data centers)
 
-The visualizations emphasize that electricity consumption is not uniformly distributed and depends strongly on socio-economic dynamics rather than geography alone.
+The visualizations emphasize that energy consumption is not uniformly distributed and depends strongly on socio-economic dynamics rather than geography alone. If you want more details on our "data-analysis", read the texts displayed on the visualization pages.
 
 ## Copyright
 We declare that the code provided in this project was produced entirely by ourselves,
