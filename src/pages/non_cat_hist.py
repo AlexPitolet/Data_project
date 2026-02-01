@@ -5,7 +5,11 @@ from dash import dcc, html, Input, Output
 
 
 df = pd.read_csv("data/cleaned/conso_totale.csv")
-df["Année"] = df["Année"].astype(int)
+#df["Année"] = df["Année"].astype(int)
+print(df[df["Année"] == 2019]["Code Commune"].nunique())
+print(df["Code Commune"].nunique())
+
+
 annees_disponibles = sorted(df["Année"].unique())
 df_hist = df[["Code Commune", "Conso totale (MWh)", "Année"]]
 
@@ -54,38 +58,25 @@ def register_callback(app):
     )
     def update_figure(selected_year):
 
-        filtered_df = df_hist[df_hist["Année"] == selected_year]
-        filtered_df = filtered_df[filtered_df["Conso totale (MWh)"] > 0]
-        filtered_df["log_conso"] = np.log10(filtered_df["Conso totale (MWh)"])
-        # fig = px.histogram(
-        #     filtered_df,
-        #     x="Conso totale (MWh)",
-        #     title=f"Répartition en {selected_year}",
-        #     labels={
-        #         "Conso totale (MWh)": "Consommation totale (MWh)",
-        #         "count": "Nombre de communes"
-        #     }
-        # )
+        df_year = df_hist[df_hist["Année"] == selected_year]
+        df_year = df_year[df_year["Conso totale (MWh)"] > 0]
+        df_tres_faible = df_year[df_year["Conso totale (MWh)"] < 1]
+        
+        nb_tres_faible = df_tres_faible["Code Commune"].nunique()
 
-        # fig.update_xaxes(
-        #     type="log",
-        #     tickvals=[1e3, 1e4, 1e5, 1e6],
-        #     ticktext=[
-        #         "1 GWh",
-        #         "10 GWh",
-        #         "100 GWh",
-        #         "1 TWh"
-        #     ]
-        # )
+        df_log = df_year[df_year["Conso totale (MWh)"] >= 1]
+        df_log["log_conso"] = np.log10(df_log["Conso totale (MWh)"])
 
-        # fig.update_traces(
-        #     hovertemplate=
-        #     "Consommation : %{x:,.0f} MWh<br>" +
-        #     "Communes : %{y}<extra></extra>"
-        # )filtered_df["log_conso"] = np.log10(filtered_df["Conso totale (MWh)"])
+        
+
+        
+        
+
+        
+        
 
         fig = px.histogram(
-            filtered_df,
+            df_log,
             x="log_conso",
             nbins=50,
             title=f"Répartition en {selected_year}"
@@ -111,6 +102,16 @@ def register_callback(app):
             hovertemplate=
             "Consommation : %{x:.1f} log10(MWh)<br>" +
             "Communes : %{y}<extra></extra>"
+        )
+
+        fig.add_annotation(
+            text=f"Communes à très faible consommation (< 1 MWh) : {nb_tres_faible}",
+            xref="paper",
+            yref="paper",
+            x=0.99,
+            y=0.95,
+            showarrow=False,
+            align="right"
         )
 
         return fig

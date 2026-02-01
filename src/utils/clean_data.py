@@ -4,7 +4,7 @@ import shutil
 import os
 
 CLEAN_DATA_DIR = "data/cleaned"
-NB_DATA = 11 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
+NB_DATA = 9 # Number of files in CLEAN_DATA_DIR AFTER the cleaning
 
 
 def clean_geojson():   
